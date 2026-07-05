@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.agentic_build_lab/schemas/video_topic_brief.schema.json",
+  "title": "video_topic_brief",
+  "type": "object",
+  "required": [
+    "candidate_id",
+    "title",
+    "source_url",
+    "target_workflow",
+    "hook",
+    "video_angle",
+    "evidence_needed",
+    "suggested_assets",
+    "audience_questions",
+    "risk_notes",
+    "workflow_inputs"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "candidate_id": { "type": "string" },
+    "title": { "type": "string" },
+    "source_url": { "type": ["string", "null"] },
+    "target_workflow": {
+      "type": "string",
+      "enum": [
+        "evidence_driven_ai_video",
+        "math_model_board_animation",
+        "ai_editing_workflow",
+        "quant_signal_research"
+      ]
+    },
+    "hook": { "type": "string" },
+    "video_angle": { "type": "string" },
+    "evidence_needed": { "type": "array", "items": { "type": "string" } },
+    "suggested_assets": { "type": "array", "items": { "type": "string" } },
+    "audience_questions": { "type": "array", "items": { "type": "string" } },
+    "risk_notes": { "type": "array", "items": { "type": "string" } },
+    "workflow_inputs": { "type": "object", "additionalProperties": true }
+  }
+}

@@ -54,6 +54,21 @@ The adapter writes:
 The JSON shape is defined in
 `schemas/content_video_snapshot.schema.json`.
 
+Topic discovery and brief generation:
+
+```powershell
+python scripts\discover_content_topics.py `
+  --source manual `
+  --topic "Codex content workflow" `
+  --target-workflow evidence_driven_ai_video `
+  --output-dir outputs\content_experiment\topic_discovery_demo
+```
+
+The candidate and brief shapes are defined in:
+
+- `schemas/content_candidate.schema.json`
+- `schemas/video_topic_brief.schema.json`
+
 Snapshots can be imported into SQLite:
 
 ```powershell

@@ -45,3 +45,16 @@ python scripts\render_model_video.py --config examples\garch_volatility_scene.js
 - `outputs/renders/garch_volatility_scene/render_report.json`
 
 当前能力范围：`blackboard_formula` 模板 + `volatility_area` 图表。后续再扩展到更多 chart_type 和模板。
+
+## Content Experiment Engine
+
+This repository also contains a reusable content experiment module under
+`packages/content_experiment_engine`. It can capture public video snapshots,
+normalize topic candidates, score them with a starter rubric, generate workflow
+briefs, and write queryable experiment data to SQLite.
+
+See:
+
+- `docs/content_experiment_module.md`
+- `docs/cheat_on_content_upstream_audit.md`
+- `docs/content_experiment_engine_integration_plan.md`

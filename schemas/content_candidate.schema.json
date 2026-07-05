@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.agentic_build_lab/schemas/content_candidate.schema.json",
+  "title": "content_candidate",
+  "type": "object",
+  "required": ["id", "title", "source", "snapshot_text", "snapshot_at"],
+  "additionalProperties": true,
+  "properties": {
+    "id": { "type": "string", "minLength": 12, "maxLength": 12 },
+    "title": { "type": "string", "minLength": 1 },
+    "source": { "type": "string", "minLength": 1 },
+    "snapshot_text": { "type": "string", "minLength": 1 },
+    "snapshot_at": { "type": "string" },
+    "url": { "type": ["string", "null"] },
+    "tier": { "type": ["string", "null"], "enum": ["tier1", "tier2", "tier3", "skip", "risky", "done", null] },
+    "read_status": { "type": ["string", "null"], "enum": ["unread", "skimmed", "deep_read", "done", null] },
+    "category": { "type": ["string", "null"] },
+    "composite_score": { "type": ["number", "null"] },
+    "dimension_scores": {
+      "type": ["object", "null"],
+      "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 5 }
+    },
+    "scored_under_rubric_version": { "type": ["string", "null"] },
+    "predicted_bucket": { "type": ["string", "null"] },
+    "predicted_reason": { "type": ["string", "null"] },
+    "risk_flags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
