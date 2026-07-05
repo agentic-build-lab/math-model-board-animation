@@ -1,6 +1,11 @@
 """Reusable content experiment adapters for video production systems."""
 
 from .brief_generator import generate_video_brief
+from .calibration_reports import (
+    collect_calibration_samples,
+    render_calibration_csv,
+    render_calibration_markdown,
+)
 from .bilibili_public_video import extract_bvid, fetch_public_bilibili_snapshot
 from .candidates import Candidate, candidate_id, normalize_candidate
 from .douyin_public_video import extract_aweme_id, fetch_public_video_snapshot
@@ -14,6 +19,7 @@ from .platform_profiles import (
 from .prediction_records import PredictionRecord, append_retro, write_prediction
 from .review_report import render_content_review_markdown, write_content_review_markdown
 from .rubric import score_candidate
+from .text_similarity import normalize_for_similarity, text_diff_percent
 from .transcripts import (
     TranscriptArtifact,
     create_transcript_artifact,
@@ -28,6 +34,7 @@ __all__ = [
     "TranscriptArtifact",
     "append_retro",
     "candidate_id",
+    "collect_calibration_samples",
     "create_transcript_artifact",
     "extract_bvid",
     "extract_aweme_id",
@@ -39,9 +46,13 @@ __all__ = [
     "normalize_candidate",
     "platform_weighted_score",
     "profiles_as_dict",
+    "normalize_for_similarity",
     "render_content_review_markdown",
+    "render_calibration_csv",
+    "render_calibration_markdown",
     "render_transcript_markdown",
     "score_candidate",
+    "text_diff_percent",
     "write_content_review_markdown",
     "write_prediction",
     "write_transcript_artifact",

@@ -24,6 +24,8 @@ interfaces.
 - Script extraction contract: transcripts become normalized artifacts before
   analysis, regardless of whether they came from Whisper, manual captions, or a
   cloud ASR service.
+- Text-diff and calibration reports: script changes and prediction error are
+  measured with local, dependency-light tools.
 
 ## What We Did Not Vendor
 
@@ -42,9 +44,13 @@ interfaces.
 ## Upstream Parts Still Worth Reusing Later
 
 - Bilibili public-stat adapter. Imported locally as `bilibili_public_video`.
-- Xiaohongshu Playwright adapter, if we decide the platform is important.
+- Xiaohongshu Playwright adapter. Migrated as an isolated contract in
+  `integrations/experimental_platform_adapters/xiaohongshu_contract.md`;
+  executable crawler is intentionally not vendored yet.
 - LinkedIn session adapter, only for the user's own account or permitted pages.
-- Douyin session adapter, only for user-authorized creator workflows.
+- Douyin session adapter. Migrated as an isolated contract in
+  `integrations/experimental_platform_adapters/douyin_session_contract.md`;
+  executable crawler is intentionally not vendored yet.
 - Trend-source routing and cadence protocols, adapted into a platform profile
   and source-selection layer rather than copied as Claude-specific commands.
 - Rubric bump validation and score-curve tools, adapted later into
@@ -57,6 +63,10 @@ interfaces.
   Claude hook.
 - Human-readable markdown views generated from SQLite. Adapted locally as
   `review_report.py` and `export_content_review.py`.
+- Upstream `diff_pct.py`. Adapted locally as `text_similarity.py` and
+  `compare_text_similarity.py`.
+- Upstream `score-curve.py`. Adapted locally as `calibration_reports.py` and
+  `export_calibration_report.py`.
 
 ## Current Local Module
 
@@ -71,6 +81,8 @@ Current interfaces:
 - `brief_generator`: converts a candidate into a workflow-neutral video brief.
 - `trend_sources`: manual, Zhihu hot, and Weibo hot candidate sources.
 - `prediction_records`: immutable prediction markdown and retro appends.
+- `text_similarity`: normalized script/transcript difference checks.
+- `calibration_reports`: prediction error reports and calibration samples.
 - `transcripts`: normalized transcript JSON/markdown artifacts.
 - `review_report`: human-readable SQLite review markdown.
 - `snapshot_store`: SQLite schema bootstrap and snapshot import.

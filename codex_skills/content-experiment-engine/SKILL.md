@@ -30,6 +30,7 @@ Prefer JSON, SQLite, and CLI contracts over ad hoc notes.
    - Create a prediction before viewing performance data.
    - Use `scripts/create_content_prediction.py`.
    - Append reviews with `scripts/append_content_retro.py`.
+   - Use `scripts/export_calibration_report.py` after retros contain actual outcomes.
    - Never edit the `## Prediction` section after creation.
 
 5. User gives a transcript, SRT, VTT, or ASR output:
@@ -124,6 +125,21 @@ python scripts\export_platform_profiles.py `
   --output outputs\content_experiment\platform_profiles.json
 ```
 
+Compare script or transcript drift:
+
+```powershell
+python scripts\compare_text_similarity.py old_script.md new_script.md
+```
+
+Export calibration report:
+
+```powershell
+python scripts\export_calibration_report.py `
+  --predictions outputs\content_experiment\predictions `
+  --output-md outputs\content_experiment\calibration_report.md `
+  --output-csv outputs\content_experiment\calibration_samples.csv
+```
+
 ## Output Contracts
 
 - Candidate schema: `schemas/content_candidate.schema.json`
@@ -147,3 +163,5 @@ python scripts\export_platform_profiles.py `
 - Upstream audit: `docs/cheat_on_content_upstream_audit.md`
 - Integration plan: `docs/content_experiment_engine_integration_plan.md`
 - Module guide: `docs/content_experiment_module.md`
+- Calibration protocol: `docs/calibration_protocol.md`
+- Experimental platform adapter contracts: `integrations/experimental_platform_adapters/`

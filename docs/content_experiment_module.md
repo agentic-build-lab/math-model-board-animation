@@ -101,6 +101,20 @@ python scripts\export_platform_profiles.py `
 
 The profile schema is defined in `schemas/platform_profile.schema.json`.
 
+Calibration and script-diff tools:
+
+```powershell
+python scripts\compare_text_similarity.py old_script.md new_script.md
+
+python scripts\export_calibration_report.py `
+  --predictions outputs\content_experiment\predictions `
+  --output-md outputs\content_experiment\calibration_report.md `
+  --output-csv outputs\content_experiment\calibration_samples.csv
+```
+
+The adapted calibration protocol is documented in
+`docs/calibration_protocol.md`.
+
 Transcript artifact generation adapts the upstream Whisper idea into a
 Codex-friendly contract. The project does not force one ASR engine; it accepts
 manual text, SRT, VTT, Whisper output, or cloud ASR output and normalizes it

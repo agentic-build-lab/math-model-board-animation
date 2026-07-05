@@ -12,6 +12,7 @@ work/
 
 # Browser login state, crawler diagnostics, and content experiment runtime data
 .auth/
+.auth-xhs/
 .cheat-cache/
 videos/
 

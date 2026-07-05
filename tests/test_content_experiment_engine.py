@@ -34,6 +34,11 @@ from packages.content_experiment_engine.platform_profiles import (
     platform_weighted_score,
 )
 from packages.content_experiment_engine.review_report import render_content_review_markdown
+from packages.content_experiment_engine.text_similarity import text_diff_percent
+from packages.content_experiment_engine.calibration_reports import (
+    collect_calibration_samples,
+    render_calibration_markdown,
+)
 from packages.content_experiment_engine.transcripts import (
     create_transcript_artifact,
     normalize_transcript_text,
@@ -143,6 +148,46 @@ class PlatformProfileTests(unittest.TestCase):
     def test_get_platform_profile_rejects_unknown_key(self) -> None:
         with self.assertRaises(KeyError):
             get_platform_profile("unknown_platform")
+
+
+class TextSimilarityTests(unittest.TestCase):
+    def test_markdown_noise_does_not_dominate_diff(self) -> None:
+        original = "# Title\n\n- First sentence.\n- Second sentence."
+        revised = "First sentence. Second sentence."
+        result = text_diff_percent(original, revised)
+        self.assertLessEqual(result["diff_percent"], 10)
+        self.assertGreater(result["original_normalized_length"], 0)
+
+
+class CalibrationReportTests(unittest.TestCase):
+    def test_collect_prediction_samples_and_render_report(self) -> None:
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            prediction = root / "2026-07-05_sample.md"
+            prediction.write_text(
+                "\n".join(
+                    [
+                        "# Sample",
+                        "",
+                        "## Prediction v1",
+                        "",
+                        "**Bucket**: `30-100w`",
+                        "",
+                        "## Retro",
+                        "",
+                        "actual_plays: 80w",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            samples = collect_calibration_samples(root)
+            self.assertEqual(len(samples), 1)
+            self.assertEqual(samples[0].predicted_center, 65.0)
+            self.assertEqual(samples[0].actual_value, 80.0)
+            report = render_calibration_markdown(samples, window=1)
+            self.assertIn("Mean absolute error", report)
+            self.assertIn("30-100w", report)
 
 
 class TranscriptTests(unittest.TestCase):
