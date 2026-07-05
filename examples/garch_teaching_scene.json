@@ -1,0 +1,150 @@
+{
+  "project": {
+    "title": "GARCH 波动率模型：教学暂停版",
+    "domain": "quant_finance",
+    "audience": "有基础金融知识的短视频观众",
+    "objective": "用 24 秒分阶段解释 GARCH 的 calm / shock / clustering / decay 节奏"
+  },
+  "video": {
+    "aspect_ratio": "16:9",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "language": "zh-CN",
+    "duration": 24.0
+  },
+  "style": {
+    "template": "blackboard_formula",
+    "palette": "black_teal_red",
+    "quality": "publish_review"
+  },
+  "narration": {
+    "mode": "caption_first",
+    "subtitle_position": "bottom_safe_area"
+  },
+  "scenes": [
+    {
+      "id": "garch_volatility_teaching",
+      "title": "GARCH 波动率模型：从冲击到聚集",
+      "subtitle": "calm → shock → clustering → decay",
+      "duration": 24.0,
+      "formula": {
+        "format": "unicode",
+        "text": "σₜ² = α₀ + α₁ε²ₜ₋₁ + β₁σ²ₜ₋₁"
+      },
+      "explanation": "波动率不是随机乱跳，它会在冲击之后持续一段时间。",
+      "chart_type": "volatility_area",
+      "data_source": {
+        "type": "synthetic",
+        "shape": "clustered_volatility",
+        "seed": 20260705
+      },
+      "animation": {
+        "title": "fade_in",
+        "formula": "fade_in",
+        "chart": "staged_volatility_teaching",
+        "highlight": "none"
+      },
+      "timing_events": [
+        {
+          "start_ms": 0,
+          "end_ms": 2000,
+          "visual_action": "first visual hook: title/subtitle and empty chart space only",
+          "camera_action": "locked wide frame",
+          "text_density": "low",
+          "comfort_note": "do not stack definition text in opening"
+        },
+        {
+          "start_ms": 2000,
+          "end_ms": 6000,
+          "visual_action": "core GARCH formula appears while axes settle",
+          "camera_action": "locked wide frame",
+          "text_density": "medium",
+          "comfort_note": "formula gets readable hold before full curve construction"
+        },
+        {
+          "start_ms": 6000,
+          "end_ms": 10000,
+          "visual_action": "calm segment establishes low-volatility baseline",
+          "camera_action": "locked wide frame",
+          "text_density": "medium",
+          "comfort_note": "small stage label only; no extra paragraph"
+        },
+        {
+          "start_ms": 10000,
+          "end_ms": 14000,
+          "visual_action": "shock segment rises toward volatility spike",
+          "camera_action": "subtle local emphasis via stage marker, no zoom shake",
+          "text_density": "medium",
+          "comfort_note": "highlight should be clear but not neon"
+        },
+        {
+          "start_ms": 14000,
+          "end_ms": 18500,
+          "visual_action": "clustering segment shows elevated volatility persistence",
+          "camera_action": "locked wide frame with stage marker",
+          "text_density": "medium",
+          "comfort_note": "preserve curve readability over label"
+        },
+        {
+          "start_ms": 18500,
+          "end_ms": 22000,
+          "visual_action": "decay segment settles after cluster",
+          "camera_action": "locked wide frame",
+          "text_density": "medium",
+          "comfort_note": "motion slows before final pause"
+        },
+        {
+          "start_ms": 22000,
+          "end_ms": 24000,
+          "visual_action": "teaching pause: final curve and formula hold",
+          "camera_action": "stable frame",
+          "text_density": "low",
+          "comfort_note": "frame must be usable as a classroom pause"
+        }
+      ],
+      "captions": [
+        {
+          "text": "先看平静期：风险在较低区间缓慢波动。",
+          "time": [
+            0.8,
+            5.5
+          ]
+        },
+        {
+          "text": "一次市场冲击，会把条件方差迅速抬高。",
+          "time": [
+            6.0,
+            10.5
+          ]
+        },
+        {
+          "text": "GARCH 的关键，是冲击之后波动不会马上消失。",
+          "time": [
+            10.5,
+            16.5
+          ]
+        },
+        {
+          "text": "上一期冲击和上一期波动率，共同解释这一期风险。",
+          "time": [
+            16.5,
+            22.0
+          ]
+        },
+        {
+          "text": "最终停在公式和曲线，便于课堂继续讲解。",
+          "time": [
+            22.0,
+            24.0
+          ]
+        }
+      ]
+    }
+  ],
+  "quality": {
+    "manual_review_required": true,
+    "generate_contact_sheet": true,
+    "formula_check_required": true
+  }
+}

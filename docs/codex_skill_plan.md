@@ -106,3 +106,80 @@ Do not sacrifice visual quality for automation. Always preserve a manual review 
 2. 至少两个模板跑通。
 3. 项目内已有 5 条以上样片记录。
 4. 审片意见主要集中在内容，而不是基础视觉崩坏。
+
+## 2026-07-05 本轮沉淀
+
+### 成功参数
+
+- GARCH 面积图垂直映射使用 10%-86% 区间，比贴顶曲线更舒服。
+- 面积填充建议 `alpha_low=42`、`alpha_high=108`，保持红色存在感但避免廉价大红块。
+- 主曲线 4 px + 低透明度外发光，比 3 px 强光更清晰且更高级。
+- 第二样片 CAPM 使用散点先出现、拟合线后生长，验证模板不只适用于 GARCH。
+
+### 弯路和环境限制
+
+- 云端镜像缺少 Windows 中文字体时必须有 Linux/DejaVu fallback，否则默认渲染会在加载字体时失败。
+- 云端镜像缺少 `ffmpeg` 时无法生成真实 mp4；apt/pip 在本轮被代理 403 阻断。未来 skill 的环境检查必须把 `ffmpeg -version` 作为硬门槛。
+- contact sheet 也不能依赖 Windows 字体路径。
+
+### 质量检查清单补充
+
+- 渲染前：检查字体、ffmpeg、numpy、PIL。
+- 渲染后：检查 `render_report.json` 的 `encode_status` 必须为 `success` 才能发布。
+- 审片：同时看 mp4 和 contact sheet；如果只有 contact sheet，只能做构图初审，不能确认运动节奏。
+- 归档：每次输出必须有 version、config snapshot、changes、manifest 记录。
+
+## 2026-07-05 cloud continuation素材
+
+### 输入输出约定
+
+- 输入：JSON/YAML config，必须先通过 `scripts/validate_model_video_input.py`。
+- 输出：versioned render directory with `config_snapshot.json`, `changes.md`, `review_notes.md`, `render_report.json`, contact sheet, optional `preview.webp`, optional `preview.html`, and mp4 when `ffmpeg` exists.
+- Manifest：append-only `outputs/renders/manifest.jsonl`; 不覆盖旧版本。
+
+### fallback 策略
+
+- 没有 `ffmpeg`：继续生成 frames、contact sheet、report、review notes、config snapshot、manifest、WebP/HTML draft preview；不得假装 mp4 成功。
+- 没有 CJK 字体：允许流程验证，但最终中文样片必须安装 Noto CJK 或授权品牌字体。
+- 网络代理阻塞：使用 devcontainer / GitHub Actions 声明依赖，或改用预构建 runner image。
+
+### 视觉基线补充
+
+- GARCH：浅红填充、明亮细轮廓、峰值有空间余量。
+- CAPM：点云透明但不虚，拟合线为视觉主线，字幕解释 beta。
+- Loss surface：网格应服务曲面结构，不做廉价 HUD；金色控制点是唯一强强调。
+
+## 2026-07-05 sample gallery / recipe 素材
+
+- 样片索引：`docs/sample_gallery.md`。
+- 机器可读 gallery manifest：`docs/sample_gallery_manifest.json`。
+- 媒体保留策略：`docs/media_retention_policy.md`。
+- 当前最值得沉淀为 skill recipe 的样片：GARCH volatility memory candidate，复现记录在 `docs/recipes/garch_candidate_recipe.md`。
+- 当前不把任何 `outputs/renders/**` 媒体提交进 Git；只提交 config、recipe、review gate 和 manifest 指针。
+
+## 2026-07-05 rhythm grammar 素材
+
+- 参考节奏拆解：`docs/reference_style_rhythm_study.md`。
+- 可复用 timing grammar：`docs/rhythm_timing_grammar.md`。
+- 三个样片 config 均加入 `timing_events`，每个事件包含 `start_ms`, `end_ms`, `visual_action`, `camera_action`, `text_density`, `comfort_note`。
+- skill 执行时应先生成 timing events，再渲染；如果没有 mp4，则用 `preview.html` + contact sheet 做 draft rhythm review。
+
+## 2026-07-05 teaching-version素材
+
+- 新增长版 GARCH 教学暂停版配置：`examples/garch_teaching_scene.json`。
+- 复现 recipe：`docs/recipes/garch_teaching_recipe.md`。
+- 该版本把短样片扩展为 calm / shock / clustering / decay / teaching pause，用于课程讲解而非快速展示。
+
+## 2026-07-05 showcase-version素材
+
+- 新增高级展示版 fixture：`examples/loss_surface_showcase_scene.json`。
+- 复现 recipe：`docs/recipes/loss_surface_showcase_recipe.md`。
+- 设计原则：黑底 + 克制青色曲面 + 单一金色最优点；旋转要慢，标签功能化，避免廉价 HUD。
+- 失败弯路：不要把 3D 网格做成背景装饰；不要让 glow 抢公式；不要让字幕和曲面标签同时高密度出现。
+
+## 2026-07-05 factor-surface素材
+
+- 新增 3D/伪 3D 金融模型 fixture：`examples/factor_exposure_surface_scene.json`。
+- 复现 recipe：`docs/recipes/factor_exposure_surface_recipe.md`。
+- 可复用参数：`surface_showcase_orbit`、低 alpha 青色网格、单一金色 focus point、公式延后入场、最终 3 秒稳定停帧。
+- 不要做：给每个网格点贴标签、全屏 HUD 边框、快速旋转、强 bloom 抢公式。

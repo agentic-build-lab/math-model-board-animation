@@ -1,0 +1,115 @@
+{
+  "project": {
+    "title": "因子暴露曲面高级展示版",
+    "domain": "quant_finance",
+    "audience": "量化/金融模型短视频观众",
+    "objective": "用伪 3D 曲面展示风格因子与收益/风险暴露之间的结构关系"
+  },
+  "video": {
+    "aspect_ratio": "16:9",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "language": "zh-CN",
+    "duration": 24.0
+  },
+  "style": {
+    "template": "blackboard_formula",
+    "palette": "black_teal_gold",
+    "quality": "publish_review"
+  },
+  "narration": {
+    "mode": "caption_first",
+    "subtitle_position": "bottom_safe_area"
+  },
+  "scenes": [
+    {
+      "id": "factor_exposure_surface",
+      "title": "Factor Exposure Surface",
+      "subtitle": "在多因子空间里观察收益/风险暴露",
+      "duration": 24.0,
+      "formula": {
+        "format": "unicode",
+        "text": "E[Rᵢ] = βᵢ,value Fvalue + βᵢ,mom Fmom + εᵢ"
+      },
+      "explanation": "把风格因子看成坐标，暴露强弱形成一张可解释的曲面。",
+      "chart_type": "rotating_surface",
+      "data_source": {
+        "type": "computed",
+        "shape": "factor_exposure_surface",
+        "seed": 20260709
+      },
+      "animation": {
+        "title": "fade_in",
+        "formula": "fade_in",
+        "chart": "surface_showcase_orbit",
+        "highlight": "minimum_point"
+      },
+      "timing_events": [
+        {
+          "start_ms": 0,
+          "end_ms": 2000,
+          "visual_action": "premium hook: factor-space title and empty surface stage",
+          "camera_action": "locked wide frame",
+          "text_density": "low",
+          "comfort_note": "do not introduce factor definitions yet"
+        },
+        {
+          "start_ms": 2000,
+          "end_ms": 7000,
+          "visual_action": "surface grid constructs as value/momentum exposure landscape",
+          "camera_action": "slow orbit begins",
+          "text_density": "low",
+          "comfort_note": "grid must stay sparse enough for factor interpretation"
+        },
+        {
+          "start_ms": 7000,
+          "end_ms": 14000,
+          "visual_action": "formula appears; surface holds as factor exposure map",
+          "camera_action": "slow orbit with stable title/footer",
+          "text_density": "medium",
+          "comfort_note": "formula readability has priority over 3D motion"
+        },
+        {
+          "start_ms": 14000,
+          "end_ms": 21000,
+          "visual_action": "gold focus point marks an interpretable portfolio/factor regime",
+          "camera_action": "subtle orbit only, no fast zoom",
+          "text_density": "medium",
+          "comfort_note": "highlight is a model focus point, not decorative sparkle"
+        },
+        {
+          "start_ms": 21000,
+          "end_ms": 24000,
+          "visual_action": "final teaching/showcase hold with formula and surface",
+          "camera_action": "settle into stable end frame",
+          "text_density": "low",
+          "comfort_note": "pause frame should support narration or title-card use"
+        }
+      ],
+      "captions": [
+        {
+          "text": "把 value 和 momentum 看成坐标，因子暴露就有了空间结构。",
+          "time": [2.0, 8.0]
+        },
+        {
+          "text": "曲面不是装饰，它帮助我们看到组合在因子空间里的位置。",
+          "time": [8.0, 16.0]
+        },
+        {
+          "text": "金色点标出当前关注的组合或风险状态。",
+          "time": [16.0, 21.0]
+        },
+        {
+          "text": "最终停住，给公式和结构留出讲解时间。",
+          "time": [21.0, 24.0]
+        }
+      ]
+    }
+  ],
+  "quality": {
+    "manual_review_required": true,
+    "generate_contact_sheet": true,
+    "formula_check_required": true
+  }
+}

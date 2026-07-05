@@ -201,3 +201,7 @@ packages/
 - 模板选择。
 
 但不开放过多低层样式，否则会快速变成难维护的“参数地狱”。
+
+## 2026-07-05 validation note
+
+A lightweight built-in validator now lives at `scripts/validate_model_video_input.py`. It intentionally avoids adding `jsonschema` as a dependency in the constrained cloud environment, but checks the schema-driven enum fields that most often drift during rapid prototype work: template, quality level, chart type, formula format, animation chart mode, and highlight mode.
