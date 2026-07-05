@@ -92,6 +92,15 @@ python scripts\import_content_snapshot.py `
 
 The database schema is mirrored in `schemas/content_experiment.schema.sql`.
 
+Platform-specific scoring profiles:
+
+```powershell
+python scripts\export_platform_profiles.py `
+  --output outputs\content_experiment\platform_profiles.json
+```
+
+The profile schema is defined in `schemas/platform_profile.schema.json`.
+
 Transcript artifact generation adapts the upstream Whisper idea into a
 Codex-friendly contract. The project does not force one ASR engine; it accepts
 manual text, SRT, VTT, Whisper output, or cloud ASR output and normalizes it

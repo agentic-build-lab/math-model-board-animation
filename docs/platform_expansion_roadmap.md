@@ -158,8 +158,10 @@ Next:
 
 ## Platform Profiles
 
-Add `platform_profiles.py` or a JSON/YAML profile directory. Each profile should
-define:
+The first profile layer is implemented in
+`packages/content_experiment_engine/platform_profiles.py`.
+
+Each profile defines:
 
 - platform name;
 - content formats;
@@ -169,6 +171,16 @@ define:
 - unavailable metrics;
 - legal/compliance notes;
 - product readiness level.
+
+Profiles currently included:
+
+- `youtube_long`
+- `youtube_shorts`
+- `bilibili`
+- `douyin`
+- `tiktok`
+- `x`
+- `xiaohongshu`
 
 Example dimensions:
 
@@ -187,7 +199,7 @@ Example dimensions:
 ## Productization Order
 
 1. YouTube official API adapter.
-2. Platform profile layer.
+2. Platform profile layer. Done in `platform_profiles`.
 3. YouTube creator brief exporter.
 4. Comment mining and audience-question clustering.
 5. Web console for candidates, snapshots, predictions, and retros.

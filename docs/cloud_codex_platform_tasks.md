@@ -55,6 +55,12 @@ Add a platform-specific scoring profile layer so the same topic can be scored
 differently for YouTube, YouTube Shorts, Bilibili, Douyin, TikTok, X, and
 Xiaohongshu.
 
+Status:
+
+Implemented in `packages/content_experiment_engine/platform_profiles.py`.
+Future work should refine weights with real prediction/retro data rather than
+replacing the contract.
+
 Expected files:
 
 - `packages/content_experiment_engine/platform_profiles.py`

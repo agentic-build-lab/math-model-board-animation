@@ -27,6 +27,12 @@ from packages.content_experiment_engine.prediction_records import (
     render_prediction_markdown,
     write_prediction,
 )
+from packages.content_experiment_engine.platform_profiles import (
+    get_platform_profile,
+    list_platform_profiles,
+    normalized_weights,
+    platform_weighted_score,
+)
 from packages.content_experiment_engine.review_report import render_content_review_markdown
 from packages.content_experiment_engine.transcripts import (
     create_transcript_artifact,
@@ -107,6 +113,36 @@ class PredictionRecordTests(unittest.TestCase):
             after_hash = append_retro(path, "### T+3 review\n- Actual result recorded.")
             self.assertEqual(before_hash, written_hash)
             self.assertEqual(before_hash, after_hash)
+
+
+class PlatformProfileTests(unittest.TestCase):
+    def test_default_profiles_cover_target_platforms(self) -> None:
+        keys = {profile.key for profile in list_platform_profiles()}
+        self.assertIn("youtube_long", keys)
+        self.assertIn("youtube_shorts", keys)
+        self.assertIn("bilibili", keys)
+        self.assertIn("douyin", keys)
+        self.assertIn("tiktok", keys)
+        self.assertIn("x", keys)
+        self.assertIn("xiaohongshu", keys)
+
+    def test_normalized_weights_sum_to_one(self) -> None:
+        for profile in list_platform_profiles():
+            total = sum(normalized_weights(profile).values())
+            self.assertAlmostEqual(total, 1.0, places=4)
+
+    def test_platform_weighted_score(self) -> None:
+        result = platform_weighted_score(
+            "youtube-long",
+            {"wi": 5, "si": 4, "hd": 5, "cev": 3, "ef": 4, "cf": 4, "lt": 5},
+        )
+        self.assertEqual(result["profile_key"], "youtube_long")
+        self.assertGreaterEqual(result["composite_score"], 8.0)
+        self.assertEqual(len(result["top_dimensions"]), 3)
+
+    def test_get_platform_profile_rejects_unknown_key(self) -> None:
+        with self.assertRaises(KeyError):
+            get_platform_profile("unknown_platform")
 
 
 class TranscriptTests(unittest.TestCase):

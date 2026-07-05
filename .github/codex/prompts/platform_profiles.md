@@ -8,7 +8,8 @@ Read:
 - `packages/content_experiment_engine/brief_generator.py`
 - `tests/test_content_experiment_engine.py`
 
-Implement Task 2 from `docs/cloud_codex_platform_tasks.md`.
+Task 2 is already implemented. Continue by reviewing and improving the existing
+profile weights only if the current tests and docs show a clear gap.
 
 Constraints:
 

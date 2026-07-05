@@ -22,6 +22,8 @@ Prefer JSON, SQLite, and CLI contracts over ad hoc notes.
 
 3. User wants a video production plan:
    - Generate candidates and briefs first.
+   - Check platform-specific scoring with `platform_profiles` when the target
+     platform is known.
    - Route the brief to `evidence_driven_ai_video`, `math_model_board_animation`, `ai_editing_workflow`, or `quant_signal_research`.
 
 4. User wants prediction or calibration:
@@ -115,12 +117,20 @@ python scripts\export_content_review.py `
   --output outputs\content_experiment\content_review.md
 ```
 
+Export platform profiles:
+
+```powershell
+python scripts\export_platform_profiles.py `
+  --output outputs\content_experiment\platform_profiles.json
+```
+
 ## Output Contracts
 
 - Candidate schema: `schemas/content_candidate.schema.json`
 - Video brief schema: `schemas/video_topic_brief.schema.json`
 - Public video snapshot schema: `schemas/content_video_snapshot.schema.json`
 - Transcript artifact schema: `schemas/transcript_artifact.schema.json`
+- Platform profile schema: `schemas/platform_profile.schema.json`
 - SQLite schema: `schemas/content_experiment.schema.sql`
 
 ## Rules
