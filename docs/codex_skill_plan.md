@@ -88,6 +88,16 @@ Quality rule:
 Do not sacrifice visual quality for automation. Always preserve a manual review gate before final delivery.
 ```
 
+## Reference Creator Study Track
+
+- Study plan: `docs/formula_creator_reference_study_plan.md`
+- Reference target: user-provided Douyin creator `数理化之王`, resolved page
+  `https://www.douyin.com/video/7657866076827187572`.
+- The skill should learn reusable title, cover, formula, graph, and timing
+  patterns. Do not store or redistribute the original video.
+- Good samples must record config, recipe, timing beats, review notes, and
+  visual parameters so the result can be recreated without the reference file.
+
 ## 打包前验收标准
 
 - 黑板公式风至少 3 条稳定样片。
