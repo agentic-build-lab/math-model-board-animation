@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Render scratch files and imported references
+work/
+
+# Generated frame sequences
+frames/
+*_frames/
+
+# Keep render outputs out of git by default.
+# Commit selected small samples explicitly with `git add -f` when needed.
+outputs/renders/
+
+# Large media exports
+*.mov
+*.mkv
+*.avi
+*.wav
+*.mp3
+
+# Local OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
