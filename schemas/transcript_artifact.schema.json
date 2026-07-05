@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.agentic_build_lab/schemas/transcript_artifact.schema.json",
+  "title": "transcript_artifact",
+  "type": "object",
+  "required": [
+    "transcript_id",
+    "source_path",
+    "source_type",
+    "title",
+    "engine",
+    "created_at",
+    "text",
+    "segments",
+    "metadata"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "transcript_id": { "type": "string", "minLength": 24, "maxLength": 24 },
+    "source_path": { "type": "string" },
+    "source_type": { "type": "string" },
+    "title": { "type": "string" },
+    "language": { "type": ["string", "null"] },
+    "engine": { "type": "string" },
+    "created_at": { "type": "string" },
+    "duration_s": { "type": ["number", "null"] },
+    "text": { "type": "string" },
+    "segments": { "type": "array", "items": { "type": "string" } },
+    "metadata": { "type": "object", "additionalProperties": true }
+  }
+}

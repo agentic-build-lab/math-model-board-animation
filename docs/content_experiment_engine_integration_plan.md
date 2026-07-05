@@ -41,7 +41,13 @@ not only a hotspot predictor.
    - Evidence screenshot.
    - Raw response archive for debugging.
 
-6. Learn from outcomes.
+6. Normalize scripts and transcripts.
+   - Manual transcript text.
+   - SRT/VTT cleanup.
+   - Whisper or cloud ASR output.
+   - Transcript JSON and markdown artifacts.
+
+7. Learn from outcomes.
    - Prediction before publishing.
    - Performance retro after publishing.
    - Comment mining.
@@ -124,12 +130,19 @@ Required guardrails:
 
 ## Next Milestones
 
-1. Add `content_candidates` import/export to SQLite.
+1. Add `content_candidates` import/export to SQLite. Done.
 2. Add a small web console for candidates, briefs, and snapshots.
 3. Add Bilibili public adapter. Done in `bilibili_public_video`.
 4. Add prediction/retro markdown generation. Done in `prediction_records`.
-5. Add entity linking for quant research.
-6. Add workflow-specific exporters:
+5. Add transcript artifact normalization. Done in `transcripts`.
+6. Add human-readable SQLite review export. Done in `review_report`.
+7. Add entity linking for quant research.
+8. Add workflow-specific exporters:
    - evidence production package;
    - model animation scene config;
    - AI editing shot list.
+9. Evaluate login/session adapters separately:
+   - Xiaohongshu public explore;
+   - LinkedIn own-account pages;
+   - Douyin creator dashboard;
+   - never commit auth state or browser caches.

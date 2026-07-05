@@ -15,6 +15,7 @@ from packages.content_experiment_engine.rubric import score_candidate
 from packages.content_experiment_engine.snapshot_store import import_snapshot
 from packages.content_experiment_engine.snapshot_store import (
     import_candidates,
+    import_transcript,
     import_video_briefs,
 )
 from packages.content_experiment_engine.trend_sources import fetch_manual_topics
@@ -25,6 +26,12 @@ from packages.content_experiment_engine.prediction_records import (
     immutable_prediction_hash,
     render_prediction_markdown,
     write_prediction,
+)
+from packages.content_experiment_engine.review_report import render_content_review_markdown
+from packages.content_experiment_engine.transcripts import (
+    create_transcript_artifact,
+    normalize_transcript_text,
+    write_transcript_artifact,
 )
 
 
@@ -102,6 +109,40 @@ class PredictionRecordTests(unittest.TestCase):
             self.assertEqual(before_hash, after_hash)
 
 
+class TranscriptTests(unittest.TestCase):
+    def test_normalize_transcript_text_strips_srt_noise(self) -> None:
+        source = """WEBVTT
+
+1
+00:00:01,000 --> 00:00:03,000
+First sentence.
+
+2
+00:00:04,000 --> 00:00:06,000
+Second sentence.
+"""
+        self.assertEqual(
+            normalize_transcript_text(source),
+            "First sentence.\n\nSecond sentence.",
+        )
+
+    def test_write_and_import_transcript_artifact(self) -> None:
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            artifact = create_transcript_artifact(
+                source_path="sample.mp4",
+                title="Sample Video",
+                transcript_text="First sentence. Second sentence.",
+                language="en",
+                engine="manual_transcript",
+            )
+            json_path, markdown_path = write_transcript_artifact(artifact, root / "transcript")
+            database_path = root / "content.db"
+            transcript_id = import_transcript(database_path, json_path)
+            self.assertEqual(transcript_id, artifact.transcript_id)
+            self.assertTrue(markdown_path.is_file())
+
+
 class SnapshotStoreTests(unittest.TestCase):
     def test_import_snapshot_to_sqlite(self) -> None:
         snapshot = {
@@ -177,6 +218,26 @@ class SnapshotStoreTests(unittest.TestCase):
             brief_ids = import_video_briefs(database_path, briefs_path)
             self.assertEqual(candidate_ids, [candidate.id])
             self.assertEqual(len(brief_ids), 1)
+
+    def test_render_content_review_markdown(self) -> None:
+        candidate = normalize_candidate(
+            title="Topic",
+            source="manual:user",
+            snapshot_text="Topic",
+        )
+        scored = score_candidate(
+            candidate,
+            {"er": 3, "hp": 3, "ql": 3, "na": 3, "ab": 3, "sr": 3, "ev": 3},
+        )
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            candidates_path = root / "candidates.json"
+            database_path = root / "content.db"
+            candidates_path.write_text(json.dumps([scored.to_dict()]), encoding="utf-8")
+            import_candidates(database_path, candidates_path)
+            report = render_content_review_markdown(database_path)
+            self.assertIn("Content Experiment Review", report)
+            self.assertIn("Topic", report)
 
 
 if __name__ == "__main__":

@@ -21,6 +21,9 @@ interfaces.
   after repeated evidence.
 - SQL as queryable index: markdown/JSON artifacts remain auditable, SQLite
   supports dashboards and cross-project analysis.
+- Script extraction contract: transcripts become normalized artifacts before
+  analysis, regardless of whether they came from Whisper, manual captions, or a
+  cloud ASR service.
 
 ## What We Did Not Vendor
 
@@ -41,12 +44,14 @@ interfaces.
 - Bilibili public-stat adapter. Imported locally as `bilibili_public_video`.
 - Xiaohongshu Playwright adapter, if we decide the platform is important.
 - LinkedIn session adapter, only for the user's own account or permitted pages.
-- Whisper script extraction adapter.
+- Whisper script extraction adapter. Adapted locally as the engine-neutral
+  `transcripts` module and `create_transcript_artifact.py`.
 - Rubric bump validation protocol.
 - Prediction immutability hook. Adapted locally into `prediction_records.py`,
   `create_content_prediction.py`, and `append_content_retro.py` instead of a
   Claude hook.
-- Human-readable markdown views generated from SQLite.
+- Human-readable markdown views generated from SQLite. Adapted locally as
+  `review_report.py` and `export_content_review.py`.
 
 ## Current Local Module
 
@@ -61,6 +66,8 @@ Current interfaces:
 - `brief_generator`: converts a candidate into a workflow-neutral video brief.
 - `trend_sources`: manual, Zhihu hot, and Weibo hot candidate sources.
 - `prediction_records`: immutable prediction markdown and retro appends.
+- `transcripts`: normalized transcript JSON/markdown artifacts.
+- `review_report`: human-readable SQLite review markdown.
 - `snapshot_store`: SQLite schema bootstrap and snapshot import.
 
 ## Codex Version

@@ -92,6 +92,24 @@ python scripts\import_content_snapshot.py `
 
 The database schema is mirrored in `schemas/content_experiment.schema.sql`.
 
+Transcript artifact generation adapts the upstream Whisper idea into a
+Codex-friendly contract. The project does not force one ASR engine; it accepts
+manual text, SRT, VTT, Whisper output, or cloud ASR output and normalizes it
+into `transcript.json` and `transcript.md`:
+
+```powershell
+python scripts\create_transcript_artifact.py `
+  --source samples\creator_video.mp4 `
+  --transcript-file outputs\content_experiment\raw_transcript.srt `
+  --output-dir outputs\content_experiment\transcripts\creator_video `
+  --engine whisper_or_manual `
+  --language zh `
+  --database outputs\content_experiment\content_experiment.db
+```
+
+The transcript shape is defined in
+`schemas/transcript_artifact.schema.json`.
+
 Prediction records can be created and reviewed without relying on Claude hooks:
 
 ```powershell
@@ -112,6 +130,14 @@ Codex skill draft:
 
 - `codex_skills/content-experiment-engine/SKILL.md`
 
+Human-readable SQLite review reports can be exported for inspection or handoff:
+
+```powershell
+python scripts\export_content_review.py `
+  --database outputs\content_experiment\content_experiment.db `
+  --output outputs\content_experiment\content_review.md
+```
+
 ## Integration Direction
 
 Recommended downstream users:
@@ -121,7 +147,7 @@ Recommended downstream users:
 - `math-model-board-animation`: use comment mining to choose examples and
   educational angles.
 - future web console: display candidate videos, extracted comments, captured
-  evidence, and analysis state.
+  evidence, transcripts, briefs, and analysis state.
 
 ## Boundaries
 
@@ -132,3 +158,5 @@ Recommended downstream users:
   can be traced and restored.
 - Treat platform HTML and private APIs as unstable. Store screenshots and raw
   response URLs so failures can be debugged later.
+- Keep ASR, downloading, and publishing as separate stages. Transcript artifacts
+  should be normalized before downstream analysis.

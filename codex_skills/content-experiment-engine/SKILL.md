@@ -30,7 +30,15 @@ Prefer JSON, SQLite, and CLI contracts over ad hoc notes.
    - Append reviews with `scripts/append_content_retro.py`.
    - Never edit the `## Prediction` section after creation.
 
-5. User asks whether a trend can affect trading:
+5. User gives a transcript, SRT, VTT, or ASR output:
+   - Normalize it with `scripts/create_transcript_artifact.py`.
+   - Import it to SQLite with `--database` when it should be used across workflows.
+   - Keep downloading, ASR, and publishing outside this normalization step.
+
+6. User wants a project status or handoff:
+   - Export a markdown report with `scripts/export_content_review.py`.
+
+7. User asks whether a trend can affect trading:
    - Treat it as a research hypothesis only.
    - Require entity linking, event timestamps, market data validation, and leakage checks.
    - Do not treat social heat as a direct trading signal.
@@ -87,11 +95,32 @@ python scripts\append_content_retro.py `
   --text "### T+3 review`n- Actual metrics captured.`n- Comment pattern: ..."
 ```
 
+Normalize transcript:
+
+```powershell
+python scripts\create_transcript_artifact.py `
+  --source "samples\creator_video.mp4" `
+  --transcript-file "outputs\content_experiment\raw_transcript.srt" `
+  --output-dir outputs\content_experiment\transcripts\creator_video `
+  --engine whisper_or_manual `
+  --language zh `
+  --database outputs\content_experiment\content_experiment.db
+```
+
+Export SQLite review:
+
+```powershell
+python scripts\export_content_review.py `
+  --database outputs\content_experiment\content_experiment.db `
+  --output outputs\content_experiment\content_review.md
+```
+
 ## Output Contracts
 
 - Candidate schema: `schemas/content_candidate.schema.json`
 - Video brief schema: `schemas/video_topic_brief.schema.json`
 - Public video snapshot schema: `schemas/content_video_snapshot.schema.json`
+- Transcript artifact schema: `schemas/transcript_artifact.schema.json`
 - SQLite schema: `schemas/content_experiment.schema.sql`
 
 ## Rules

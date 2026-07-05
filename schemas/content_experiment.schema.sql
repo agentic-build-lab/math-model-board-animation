@@ -91,6 +91,21 @@ CREATE TABLE IF NOT EXISTS video_topic_briefs (
     FOREIGN KEY (candidate_id) REFERENCES content_candidates(candidate_id)
 );
 
+CREATE TABLE IF NOT EXISTS content_transcripts (
+    transcript_id TEXT PRIMARY KEY,
+    source_path TEXT NOT NULL,
+    source_type TEXT NOT NULL,
+    title TEXT NOT NULL,
+    language TEXT,
+    engine TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    duration_s REAL,
+    text TEXT NOT NULL,
+    segments_json TEXT NOT NULL,
+    metadata_json TEXT NOT NULL,
+    inserted_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS content_predictions (
     prediction_id TEXT PRIMARY KEY,
     candidate_id TEXT NOT NULL,

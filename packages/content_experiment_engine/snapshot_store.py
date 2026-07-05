@@ -103,6 +103,21 @@ CREATE TABLE IF NOT EXISTS video_topic_briefs (
     FOREIGN KEY (candidate_id) REFERENCES content_candidates(candidate_id)
 );
 
+CREATE TABLE IF NOT EXISTS content_transcripts (
+    transcript_id TEXT PRIMARY KEY,
+    source_path TEXT NOT NULL,
+    source_type TEXT NOT NULL,
+    title TEXT NOT NULL,
+    language TEXT,
+    engine TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    duration_s REAL,
+    text TEXT NOT NULL,
+    segments_json TEXT NOT NULL,
+    metadata_json TEXT NOT NULL,
+    inserted_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS content_predictions (
     prediction_id TEXT PRIMARY KEY,
     candidate_id TEXT NOT NULL,
@@ -164,6 +179,11 @@ def import_candidates(database_path: Path, candidates_path: Path) -> list[str]:
 def import_video_briefs(database_path: Path, briefs_path: Path) -> list[str]:
     briefs = json.loads(briefs_path.read_text(encoding="utf-8"))
     return [upsert_video_brief(database_path, brief) for brief in briefs]
+
+
+def import_transcript(database_path: Path, transcript_path: Path) -> str:
+    transcript = json.loads(transcript_path.read_text(encoding="utf-8"))
+    return upsert_transcript(database_path, transcript)
 
 
 def upsert_snapshot(database_path: Path, snapshot: dict[str, Any]) -> str:
@@ -326,6 +346,38 @@ def upsert_video_brief(database_path: Path, brief: dict[str, Any]) -> str:
         )
         connection.commit()
     return brief_id
+
+
+def upsert_transcript(database_path: Path, transcript: dict[str, Any]) -> str:
+    init_database(database_path)
+    inserted_at = datetime.now(UTC).isoformat()
+    transcript_id = transcript["transcript_id"]
+    with closing(sqlite3.connect(database_path)) as connection:
+        connection.execute(
+            """
+            INSERT OR REPLACE INTO content_transcripts (
+                transcript_id, source_path, source_type, title, language,
+                engine, created_at, duration_s, text, segments_json,
+                metadata_json, inserted_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                transcript_id,
+                transcript["source_path"],
+                transcript["source_type"],
+                transcript["title"],
+                transcript.get("language"),
+                transcript["engine"],
+                transcript["created_at"],
+                transcript.get("duration_s"),
+                transcript["text"],
+                json.dumps(transcript.get("segments") or [], ensure_ascii=False),
+                json.dumps(transcript.get("metadata") or {}, ensure_ascii=False),
+                inserted_at,
+            ),
+        )
+        connection.commit()
+    return transcript_id
 
 
 def _snapshot_id(snapshot: dict[str, Any]) -> str:
