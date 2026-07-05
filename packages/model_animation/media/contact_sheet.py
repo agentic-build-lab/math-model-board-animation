@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
+
+from model_animation.render_context import FONT_CN_CANDIDATES, load_first_font
 
 
 def make_contact_sheet(
@@ -32,7 +34,7 @@ def make_contact_sheet(
         (0, 0, 0),
     )
     draw = ImageDraw.Draw(sheet)
-    font = ImageFont.truetype("C:/Windows/Fonts/msyh.ttc", 18)
+    font = load_first_font(FONT_CN_CANDIDATES, 18)
 
     for slot, frame_index in enumerate(indices):
         image = Image.open(frame_paths[frame_index]).convert("RGB")
