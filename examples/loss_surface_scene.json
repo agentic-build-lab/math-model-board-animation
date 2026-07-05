@@ -1,0 +1,71 @@
+{
+  "project": {
+    "title": "损失函数曲面",
+    "domain": "machine_learning",
+    "audience": "AI/统计模型学习者",
+    "objective": "用伪 3D 曲面展示模型参数空间和最优点"
+  },
+  "video": {
+    "aspect_ratio": "16:9",
+    "width": 1920,
+    "height": 1080,
+    "fps": 60,
+    "language": "zh-CN",
+    "duration": 3.6
+  },
+  "style": {
+    "template": "blackboard_formula",
+    "palette": "black_teal_gold",
+    "quality": "prototype_review"
+  },
+  "narration": {
+    "mode": "caption_first",
+    "subtitle_position": "bottom_safe_area"
+  },
+  "scenes": [
+    {
+      "id": "loss_surface_minimum",
+      "title": "3D 参数空间：损失曲面",
+      "subtitle": "模型训练，就是在曲面上寻找更低的误差",
+      "duration": 3.6,
+      "formula": {
+        "format": "unicode",
+        "text": "minθ  L(θ) = 1/n Σᵢ ℓ(fθ(xᵢ), yᵢ)"
+      },
+      "explanation": "曲面高度代表损失，金色点代表当前关注的最优区域。",
+      "chart_type": "rotating_surface",
+      "data_source": {
+        "type": "computed",
+        "shape": "smooth_loss_surface",
+        "seed": 20260707
+      },
+      "animation": {
+        "title": "fade_in",
+        "formula": "fade_in",
+        "chart": "surface_reveal_rotate",
+        "highlight": "minimum_point"
+      },
+      "captions": [
+        {
+          "text": "把参数看成空间坐标，损失就形成一张曲面。",
+          "time": [
+            0.5,
+            2.0
+          ]
+        },
+        {
+          "text": "训练过程，就是沿着结构更清晰的方向下降。",
+          "time": [
+            2.0,
+            3.6
+          ]
+        }
+      ]
+    }
+  ],
+  "quality": {
+    "manual_review_required": true,
+    "generate_contact_sheet": true,
+    "formula_check_required": true
+  }
+}

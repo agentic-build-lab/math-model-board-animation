@@ -8,6 +8,7 @@ import numpy as np
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 from model_animation.easing import clamp, ease_out, lerp
+from model_animation.charts.surface import project_loss_surface
 from model_animation.render_context import (
     RenderContext,
     draw_centered_text,
@@ -69,10 +70,14 @@ class BlackboardFormulaRenderer:
         draw = ImageDraw.Draw(image, "RGBA")
 
         scene, scene_t = self._scene_at(t)
-        if scene["chart_type"] != "volatility_area":
-            raise ValueError(f"黑板模板第一版暂不支持 chart_type={scene['chart_type']}")
-
-        self._draw_volatility_area_scene(image, draw, scene, scene_t)
+        if scene["chart_type"] == "volatility_area":
+            self._draw_volatility_area_scene(image, draw, scene, scene_t)
+        elif scene["chart_type"] == "scatter_regression":
+            self._draw_scatter_regression_scene(image, draw, scene, scene_t)
+        elif scene["chart_type"] == "rotating_surface":
+            self._draw_rotating_surface_scene(image, draw, scene, scene_t)
+        else:
+            raise ValueError(f"黑板模板暂不支持 chart_type={scene['chart_type']}")
         return image.convert("RGB")
 
     def _build_timeline(self) -> list[tuple[float, float, dict[str, Any]]]:
@@ -145,19 +150,19 @@ class BlackboardFormulaRenderer:
         values = np.array([box[3] - y for _, y in mapped_points], dtype=float)
         chart_progress = ease_out((t - 0.45) / 2.2)
         points = partial_points(mapped_points, chart_progress)
-        self._fill_under_curve(image, points, box[3], RED_FILL, alpha_low=125, alpha_high=190)
+        self._fill_under_curve(image, points, box[3], RED_FILL, alpha_low=42, alpha_high=108)
         self._line(
             image,
             points,
             RED_LINE,
-            width=3,
+            width=4,
             alpha=255,
             core_color=RED_LINE_CORE,
             core_alpha=255,
             glow_color=RED_LINE_CORE,
-            glow_alpha=150,
-            glow_width=7,
-            glow_radius=1.6,
+            glow_alpha=105,
+            glow_width=9,
+            glow_radius=1.25,
         )
 
         formula_text = scene["formula"]["text"]
@@ -167,6 +172,111 @@ class BlackboardFormulaRenderer:
         if scene.get("emphasis"):
             self._draw_emphasis(image, draw, scene, values, box, t, mapped_points)
         self._draw_active_caption(draw, scene, t)
+
+
+    def _draw_scatter_regression_scene(
+        self,
+        image: Image.Image,
+        draw: ImageDraw.ImageDraw,
+        scene: dict[str, Any],
+        t: float,
+    ) -> None:
+        title_alpha = int(255 * ease_out(t / 0.55))
+        draw_centered_text(draw, self.ctx, 73, scene["title"], self.ctx.fonts["title"], TEAL, title_alpha)
+        if scene.get("subtitle"):
+            draw_centered_text(draw, self.ctx, 132, scene["subtitle"], self.ctx.fonts["subtitle"], DIM, title_alpha)
+
+        axis_alpha = int(205 * ease_out((t - 0.12) / 0.35))
+        box = self._draw_axis(draw, alpha=axis_alpha)
+        left, top, right, bottom = box
+        rng = np.random.default_rng(int(scene.get("data_source", {}).get("seed", 20260705)))
+        beta = float(scene.get("parameters", {}).get("beta", 1.18))
+        alpha = float(scene.get("parameters", {}).get("alpha", 0.02))
+        x = np.linspace(-1, 1, 70)
+        y = alpha + beta * x + rng.normal(0, 0.22, len(x))
+        x_norm = (x - x.min()) / (x.max() - x.min())
+        y_norm = (y - y.min()) / (y.max() - y.min())
+        points = [(left + float(xx) * (right - left), bottom - (0.10 + float(yy) * 0.78) * (bottom - top)) for xx, yy in zip(x_norm, y_norm)]
+        point_progress = ease_out((t - 0.42) / 1.2)
+        visible = int(len(points) * point_progress)
+        for i, (px, py) in enumerate(points[:visible]):
+            pulse = 0.75 + 0.25 * math.sin(t * 2.0 + i * 0.7)
+            r = 4.2
+            draw.ellipse((px - r, py - r, px + r, py + r), fill=rgba(TEAL, int(150 * pulse)))
+        line_progress = ease_out((t - 1.15) / 1.35)
+        y1 = alpha + beta * x.min()
+        y2 = alpha + beta * x.max()
+        yn1 = (y1 - y.min()) / (y.max() - y.min())
+        yn2 = (y2 - y.min()) / (y.max() - y.min())
+        line = [(left, bottom - (0.10 + yn1 * 0.78) * (bottom - top)), (right, bottom - (0.10 + yn2 * 0.78) * (bottom - top))]
+        self._line(image, partial_points(line, line_progress), GOLD, width=4, alpha=int(235 * line_progress), core_color=WHITE, core_alpha=int(115 * line_progress), glow_color=GOLD, glow_alpha=int(85 * line_progress), glow_width=10, glow_radius=1.4)
+        formula_alpha = int(255 * ease_out((t - 0.9) / 0.45))
+        self._draw_formula(draw, scene["formula"]["text"], round(self.ctx.height * 0.755), formula_alpha)
+        self._draw_active_caption(draw, scene, t)
+
+    def _draw_rotating_surface_scene(
+        self,
+        image: Image.Image,
+        draw: ImageDraw.ImageDraw,
+        scene: dict[str, Any],
+        t: float,
+    ) -> None:
+        title_alpha = int(255 * ease_out(t / 0.55))
+        draw_centered_text(draw, self.ctx, 73, scene["title"], self.ctx.fonts["title"], TEAL, title_alpha)
+        if scene.get("subtitle"):
+            draw_centered_text(draw, self.ctx, 132, scene["subtitle"], self.ctx.fonts["subtitle"], DIM, title_alpha)
+
+        progress = ease_out((t - 0.32) / 1.35)
+        cx = self.ctx.width * 0.50
+        cy = self.ctx.height * 0.47
+        scale = self.ctx.width * 0.135
+        z_scale = self.ctx.height * 0.105
+        angle = -0.65 + 0.55 * math.sin(t * 0.72)
+        surface = project_loss_surface(
+            center_x=cx,
+            center_y=cy,
+            scale=scale,
+            z_scale=z_scale,
+            angle=angle,
+            grid_size=25,
+        )
+        projected = surface.points
+
+        line_layer = Image.new("RGBA", image.size, (0, 0, 0, 0))
+        line_draw = ImageDraw.Draw(line_layer, "RGBA")
+        visible_cols = max(2, int(len(projected) * progress))
+        for row in projected[:visible_cols]:
+            self._surface_polyline(line_draw, row[:visible_cols], TEAL, int(92 * progress), 2)
+        for col in range(visible_cols):
+            self._surface_polyline(line_draw, [projected[row][col] for row in range(visible_cols)], TEAL, int(70 * progress), 2)
+        glow = line_layer.filter(ImageFilter.GaussianBlur(1.3))
+        image.alpha_composite(glow)
+        image.alpha_composite(line_layer)
+
+        peak = surface.peak
+        peak_alpha = int(235 * ease_out((t - 1.15) / 0.75))
+        r = 7 + 2 * math.sin(t * 3.0)
+        draw.ellipse((peak[0] - r, peak[1] - r, peak[0] + r, peak[1] + r), fill=rgba(GOLD, peak_alpha))
+        draw.line((peak[0], peak[1] + 10, peak[0], peak[1] + 78), fill=rgba(GOLD, int(120 * progress)), width=2)
+
+        formula_alpha = int(255 * ease_out((t - 0.9) / 0.45))
+        self._draw_formula(draw, scene["formula"]["text"], round(self.ctx.height * 0.755), formula_alpha)
+        self._draw_active_caption(draw, scene, t)
+
+    def _surface_polyline(
+        self,
+        draw: ImageDraw.ImageDraw,
+        points_3d: list[tuple[float, float, float]],
+        color: tuple[int, int, int],
+        alpha: int,
+        width: int,
+    ) -> None:
+        if len(points_3d) < 2:
+            return
+        points = [(x, y) for x, y, _ in points_3d]
+        avg_z = sum(z for _, _, z in points_3d) / len(points_3d)
+        depth_alpha = int(alpha * clamp((avg_z + 1.0) / 2.3, 0.28, 1.0))
+        draw.line(points, fill=rgba(color, depth_alpha), width=width, joint="curve")
 
     def _draw_axis(
         self,
@@ -216,7 +326,7 @@ class BlackboardFormulaRenderer:
         ys = np.array([point[1] for point in REFERENCE_GARCH_PROFILE], dtype=float)
         x_norm = np.linspace(0, 1, count)
         y_norm = np.interp(x_norm, xs, ys)
-        y_norm = 0.06 + y_norm * 0.90
+        y_norm = 0.10 + y_norm * 0.76
         return [
             (
                 left + float(x) * (right - left),

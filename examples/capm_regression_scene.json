@@ -1,0 +1,75 @@
+{
+  "project": {
+    "title": "CAPM Beta 回归",
+    "domain": "quant_finance",
+    "audience": "金融/统计入门观众",
+    "objective": "用散点和拟合线解释资产收益对市场收益的暴露"
+  },
+  "video": {
+    "aspect_ratio": "16:9",
+    "width": 1920,
+    "height": 1080,
+    "fps": 60,
+    "language": "zh-CN",
+    "duration": 4.2
+  },
+  "style": {
+    "template": "blackboard_formula",
+    "palette": "black_teal_gold",
+    "quality": "prototype_review"
+  },
+  "narration": {
+    "mode": "caption_first",
+    "subtitle_position": "bottom_safe_area"
+  },
+  "scenes": [
+    {
+      "id": "capm_beta_regression",
+      "title": "CAPM Beta 回归",
+      "subtitle": "用市场收益解释资产收益的系统性风险",
+      "duration": 4.2,
+      "formula": {
+        "format": "unicode",
+        "text": "Rᵢ − Rf = α + βᵢ(Rm − Rf) + εᵢ"
+      },
+      "explanation": "斜率 β 表示资产对市场波动的敏感度。",
+      "chart_type": "scatter_regression",
+      "data_source": {
+        "type": "synthetic",
+        "shape": "market_asset_scatter",
+        "seed": 20260706
+      },
+      "parameters": {
+        "alpha": 0.02,
+        "beta": 1.18
+      },
+      "animation": {
+        "title": "fade_in",
+        "formula": "fade_in",
+        "chart": "fade_points_then_fit_line",
+        "highlight": "none"
+      },
+      "captions": [
+        {
+          "text": "每个点，是一次市场与资产收益的共同观测。",
+          "time": [
+            0.5,
+            2.2
+          ]
+        },
+        {
+          "text": "拟合线的斜率，就是资产承受系统性风险的 Beta。",
+          "time": [
+            2.2,
+            4.2
+          ]
+        }
+      ]
+    }
+  ],
+  "quality": {
+    "manual_review_required": true,
+    "generate_contact_sheet": true,
+    "formula_check_required": true
+  }
+}
