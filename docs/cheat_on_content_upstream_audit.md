@@ -44,6 +44,11 @@ interfaces.
 - Bilibili public-stat adapter. Imported locally as `bilibili_public_video`.
 - Xiaohongshu Playwright adapter, if we decide the platform is important.
 - LinkedIn session adapter, only for the user's own account or permitted pages.
+- Douyin session adapter, only for user-authorized creator workflows.
+- Trend-source routing and cadence protocols, adapted into a platform profile
+  and source-selection layer rather than copied as Claude-specific commands.
+- Rubric bump validation and score-curve tools, adapted later into
+  experiment-calibration reports.
 - Whisper script extraction adapter. Adapted locally as the engine-neutral
   `transcripts` module and `create_transcript_artifact.py`.
 - Rubric bump validation protocol.

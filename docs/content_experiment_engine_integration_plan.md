@@ -11,7 +11,8 @@ not only a hotspot predictor.
    - Zhihu hot topics.
    - Weibo hot-search topics.
    - Public video URLs.
-   - Future: Bilibili, Xiaohongshu, GitHub Trending, official reports, RSS.
+   - Future: YouTube, TikTok, X, Xiaohongshu, GitHub Trending, official
+     reports, RSS.
 
 2. Normalize candidates.
    - Stable id.
@@ -146,3 +147,10 @@ Required guardrails:
    - LinkedIn own-account pages;
    - Douyin creator dashboard;
    - never commit auth state or browser caches.
+10. Add YouTube official API adapter.
+11. Add platform profiles for YouTube, Bilibili, Douyin, TikTok, X, and
+    Xiaohongshu.
+12. Add comment mining and audience-question clustering.
+
+See `docs/platform_expansion_roadmap.md` and
+`docs/cloud_codex_platform_tasks.md` for the detailed cloud-task backlog.
