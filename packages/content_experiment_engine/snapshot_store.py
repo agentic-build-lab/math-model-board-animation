@@ -193,7 +193,7 @@ def upsert_snapshot(database_path: Path, snapshot: dict[str, Any]) -> str:
                 source["adapter"],
                 source["url"],
                 source.get("resolved_url"),
-                source.get("aweme_id"),
+                source.get("platform_video_id") or source.get("aweme_id") or source.get("bvid"),
                 source["fetched_at"],
                 video.get("title"),
                 video.get("description"),

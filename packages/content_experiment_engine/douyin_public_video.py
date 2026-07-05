@@ -157,6 +157,7 @@ async def fetch_public_video_snapshot(
             "adapter": "douyin_public_video",
             "url": video_url,
             "resolved_url": resolved_url,
+            "platform_video_id": aweme_id,
             "aweme_id": aweme_id,
             "fetched_at": fetched_at,
         },

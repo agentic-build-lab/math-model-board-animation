@@ -1,0 +1,7 @@
+interface:
+  display_name: "Content Experiment Engine"
+  short_description: "Topic scoring and video briefs"
+  default_prompt: "Use $content-experiment-engine to discover candidates, generate workflow briefs, capture public performance, and preserve prediction records."
+
+policy:
+  allow_implicit_invocation: true

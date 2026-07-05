@@ -38,13 +38,14 @@ interfaces.
 
 ## Upstream Parts Still Worth Reusing Later
 
-- Bilibili public-stat adapter.
+- Bilibili public-stat adapter. Imported locally as `bilibili_public_video`.
 - Xiaohongshu Playwright adapter, if we decide the platform is important.
 - LinkedIn session adapter, only for the user's own account or permitted pages.
 - Whisper script extraction adapter.
 - Rubric bump validation protocol.
-- Prediction immutability hook, adapted into a Codex-friendly checker instead of
-  a Claude hook.
+- Prediction immutability hook. Adapted locally into `prediction_records.py`,
+  `create_content_prediction.py`, and `append_content_retro.py` instead of a
+  Claude hook.
 - Human-readable markdown views generated from SQLite.
 
 ## Current Local Module
@@ -54,11 +55,22 @@ The local module is `packages/content_experiment_engine`.
 Current interfaces:
 
 - `douyin_public_video`: public Douyin video snapshot capture.
+- `bilibili_public_video`: public Bilibili video snapshot capture.
 - `candidates`: normalized candidate object and stable ids.
 - `rubric`: scoring contract and starter rubric.
 - `brief_generator`: converts a candidate into a workflow-neutral video brief.
 - `trend_sources`: manual, Zhihu hot, and Weibo hot candidate sources.
+- `prediction_records`: immutable prediction markdown and retro appends.
 - `snapshot_store`: SQLite schema bootstrap and snapshot import.
+
+## Codex Version
+
+The Codex-facing skill draft lives at:
+
+- `codex_skills/content-experiment-engine/SKILL.md`
+
+It is intentionally repo-local for now. After review, it can be copied or
+installed into `~/.codex/skills/content-experiment-engine` for global discovery.
 
 ## Why This Shape Is Better Than a Full Copy
 

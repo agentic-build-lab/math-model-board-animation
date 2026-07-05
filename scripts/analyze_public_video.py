@@ -10,14 +10,17 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from packages.content_experiment_engine import fetch_public_video_snapshot
+from packages.content_experiment_engine import (
+    fetch_public_bilibili_snapshot,
+    fetch_public_video_snapshot,
+)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Capture a normalized public-video snapshot for content analysis."
     )
-    parser.add_argument("--platform", choices=["douyin"], default="douyin")
+    parser.add_argument("--platform", choices=["douyin", "bilibili"], default="douyin")
     parser.add_argument("--url", required=True, help="Public video URL or aweme id.")
     parser.add_argument(
         "--output-dir",
@@ -25,6 +28,7 @@ def parse_args() -> argparse.Namespace:
         default=Path("outputs/content_experiment/public_video_snapshot"),
     )
     parser.add_argument("--max-scrolls", type=int, default=8)
+    parser.add_argument("--max-comments", type=int, default=30)
     parser.add_argument(
         "--headed",
         action="store_true",
@@ -35,12 +39,19 @@ def parse_args() -> argparse.Namespace:
 
 async def main() -> None:
     args = parse_args()
-    snapshot = await fetch_public_video_snapshot(
-        args.url,
-        args.output_dir,
-        max_scrolls=args.max_scrolls,
-        headless=not args.headed,
-    )
+    if args.platform == "bilibili":
+        snapshot = fetch_public_bilibili_snapshot(
+            args.url,
+            args.output_dir,
+            max_comments=args.max_comments,
+        )
+    else:
+        snapshot = await fetch_public_video_snapshot(
+            args.url,
+            args.output_dir,
+            max_scrolls=args.max_scrolls,
+            headless=not args.headed,
+        )
     print(json.dumps({
         "snapshot_path": str(args.output_dir / "snapshot.json"),
         "comments": len(snapshot.get("comments") or []),

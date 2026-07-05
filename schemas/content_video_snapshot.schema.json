@@ -12,18 +12,20 @@
       "required": ["platform", "adapter", "url", "resolved_url", "aweme_id", "fetched_at"],
       "additionalProperties": false,
       "properties": {
-        "platform": { "type": "string", "enum": ["douyin"] },
+        "platform": { "type": "string", "enum": ["douyin", "bilibili"] },
         "adapter": { "type": "string" },
         "url": { "type": "string" },
         "resolved_url": { "type": "string" },
+        "platform_video_id": { "type": ["string", "null"] },
         "aweme_id": { "type": ["string", "null"] },
+        "bvid": { "type": ["string", "null"] },
         "fetched_at": { "type": "string" }
       }
     },
     "video": {
       "type": "object",
       "required": ["title", "description", "author", "created_at", "duration_ms"],
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "title": { "type": ["string", "null"] },
         "description": { "type": ["string", "null"] },
@@ -66,7 +68,7 @@
       "required": ["screenshot_path", "raw_response_path", "captured_api_urls"],
       "additionalProperties": false,
       "properties": {
-        "screenshot_path": { "type": "string" },
+        "screenshot_path": { "type": ["string", "null"] },
         "raw_response_path": { "type": "string" },
         "captured_api_urls": {
           "type": "array",

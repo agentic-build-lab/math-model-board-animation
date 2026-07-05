@@ -25,6 +25,10 @@ It does not require creator-center login. It also cannot access private creator
 dashboard metrics such as completion rate, traffic source, audience profile, or
 follower conversion.
 
+`bilibili_public_video` captures public Bilibili video metadata and hot comments
+through public HTTP APIs. It does not require login and is better suited for
+repeatable public-video analysis.
+
 ## Command
 
 ```powershell
@@ -40,6 +44,15 @@ Install runtime dependencies first:
 ```powershell
 pip install -r requirements.txt
 python -m playwright install chromium
+```
+
+Bilibili public video:
+
+```powershell
+python scripts\analyze_public_video.py `
+  --platform bilibili `
+  --url https://www.bilibili.com/video/BV1xx411c7mD `
+  --output-dir outputs\content_experiment\bilibili_BV1xx411c7mD
 ```
 
 ## Output Contract
@@ -78,6 +91,26 @@ python scripts\import_content_snapshot.py `
 ```
 
 The database schema is mirrored in `schemas/content_experiment.schema.sql`.
+
+Prediction records can be created and reviewed without relying on Claude hooks:
+
+```powershell
+python scripts\create_content_prediction.py `
+  --candidate-id a16a0f05bde3 `
+  --title "Codex content workflow" `
+  --target-workflow evidence_driven_ai_video `
+  --predicted-bucket tier2 `
+  --reason "Strong hook and technical trend, but evidence needs review." `
+  --output outputs\content_experiment\predictions\a16a0f05bde3.md
+
+python scripts\append_content_retro.py `
+  --prediction outputs\content_experiment\predictions\a16a0f05bde3.md `
+  --text "### T+3 review`n- Metrics captured.`n- Comments suggest ..."
+```
+
+Codex skill draft:
+
+- `codex_skills/content-experiment-engine/SKILL.md`
 
 ## Integration Direction
 

@@ -126,8 +126,8 @@ Required guardrails:
 
 1. Add `content_candidates` import/export to SQLite.
 2. Add a small web console for candidates, briefs, and snapshots.
-3. Add Bilibili public adapter.
-4. Add prediction/retro markdown generation.
+3. Add Bilibili public adapter. Done in `bilibili_public_video`.
+4. Add prediction/retro markdown generation. Done in `prediction_records`.
 5. Add entity linking for quant research.
 6. Add workflow-specific exporters:
    - evidence production package;

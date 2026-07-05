@@ -18,6 +18,14 @@ from packages.content_experiment_engine.snapshot_store import (
     import_video_briefs,
 )
 from packages.content_experiment_engine.trend_sources import fetch_manual_topics
+from packages.content_experiment_engine.bilibili_public_video import extract_bvid
+from packages.content_experiment_engine.prediction_records import (
+    PredictionRecord,
+    append_retro,
+    immutable_prediction_hash,
+    render_prediction_markdown,
+    write_prediction,
+)
 
 
 class DouyinPublicVideoTests(unittest.TestCase):
@@ -62,6 +70,36 @@ class CandidateAndBriefTests(unittest.TestCase):
         candidates = fetch_manual_topics(["topic one", "topic two"])
         self.assertEqual(len(candidates), 2)
         self.assertEqual(candidates[0].source, "manual:user")
+
+
+class BilibiliPublicVideoTests(unittest.TestCase):
+    def test_extract_bvid_from_url(self) -> None:
+        self.assertEqual(
+            extract_bvid("https://www.bilibili.com/video/BV1xx411c7mD/?spm_id_from=333"),
+            "BV1xx411c7mD",
+        )
+
+
+class PredictionRecordTests(unittest.TestCase):
+    def test_retro_append_preserves_prediction_hash(self) -> None:
+        record = PredictionRecord(
+            candidate_id="abc123",
+            title="Sample",
+            target_workflow="evidence_driven_ai_video",
+            rubric_version="content_video_v0",
+            predicted_bucket="tier2",
+            probability={"tier1": 20, "tier2": 50, "tier3": 20, "skip": 10},
+            reason="sample reason",
+            factors=[],
+        )
+        content = render_prediction_markdown(record)
+        before_hash = immutable_prediction_hash(content)
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "prediction.md"
+            written_hash = write_prediction(path, record)
+            after_hash = append_retro(path, "### T+3 review\n- Actual result recorded.")
+            self.assertEqual(before_hash, written_hash)
+            self.assertEqual(before_hash, after_hash)
 
 
 class SnapshotStoreTests(unittest.TestCase):
