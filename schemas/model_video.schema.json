@@ -3,85 +3,205 @@
   "$id": "https://local.math_model_board_animation/schemas/model_video.schema.json",
   "title": "model_video",
   "type": "object",
-  "required": ["project", "video", "style", "scenes"],
+  "required": [
+    "project",
+    "video",
+    "style",
+    "scenes"
+  ],
   "additionalProperties": false,
   "properties": {
     "project": {
       "type": "object",
-      "required": ["title", "domain"],
+      "required": [
+        "title",
+        "domain"
+      ],
       "additionalProperties": false,
       "properties": {
-        "title": { "type": "string", "minLength": 1 },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
         "domain": {
           "type": "string",
-          "enum": ["quant_finance", "statistics", "physics", "machine_learning", "economics", "paper_explainer", "general_math"]
+          "enum": [
+            "quant_finance",
+            "statistics",
+            "physics",
+            "machine_learning",
+            "economics",
+            "paper_explainer",
+            "general_math"
+          ]
         },
-        "audience": { "type": "string" },
-        "objective": { "type": "string" }
+        "audience": {
+          "type": "string"
+        },
+        "objective": {
+          "type": "string"
+        }
       }
     },
     "video": {
       "type": "object",
-      "required": ["aspect_ratio", "width", "height", "fps"],
+      "required": [
+        "aspect_ratio",
+        "width",
+        "height",
+        "fps"
+      ],
       "additionalProperties": false,
       "properties": {
-        "aspect_ratio": { "type": "string", "enum": ["16:9", "9:16", "1:1"] },
-        "width": { "type": "integer", "minimum": 720 },
-        "height": { "type": "integer", "minimum": 720 },
-        "fps": { "type": "integer", "enum": [24, 25, 30, 50, 60] },
-        "language": { "type": "string" },
-        "duration": { "type": "number", "exclusiveMinimum": 0 }
+        "aspect_ratio": {
+          "type": "string",
+          "enum": [
+            "16:9",
+            "9:16",
+            "1:1"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 720
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 720
+        },
+        "fps": {
+          "type": "integer",
+          "enum": [
+            24,
+            25,
+            30,
+            50,
+            60
+          ]
+        },
+        "language": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
       }
     },
     "style": {
       "type": "object",
-      "required": ["template"],
+      "required": [
+        "template"
+      ],
       "additionalProperties": false,
       "properties": {
         "template": {
           "type": "string",
-          "enum": ["blackboard_formula", "modern_tech", "teaching_derivation", "paper_explainer"]
+          "enum": [
+            "blackboard_formula",
+            "modern_tech",
+            "teaching_derivation",
+            "paper_explainer"
+          ]
         },
-        "palette": { "type": "string" },
-        "quality": { "type": "string", "enum": ["draft", "internal_review", "publish_review"] }
+        "palette": {
+          "type": "string"
+        },
+        "quality": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "internal_review",
+            "publish_review",
+            "prototype_review"
+          ]
+        }
       }
     },
     "narration": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "mode": { "type": "string", "enum": ["silent", "caption_first", "voiceover_first"] },
-        "subtitle_position": { "type": "string", "enum": ["bottom_safe_area", "none"] },
-        "audio_path": { "type": "string" }
+        "mode": {
+          "type": "string",
+          "enum": [
+            "silent",
+            "caption_first",
+            "voiceover_first"
+          ]
+        },
+        "subtitle_position": {
+          "type": "string",
+          "enum": [
+            "bottom_safe_area",
+            "none"
+          ]
+        },
+        "audio_path": {
+          "type": "string"
+        }
       }
     },
     "scenes": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/scene" }
+      "items": {
+        "$ref": "#/$defs/scene"
+      }
     },
     "quality": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "manual_review_required": { "type": "boolean", "default": true },
-        "generate_contact_sheet": { "type": "boolean", "default": true },
-        "formula_check_required": { "type": "boolean", "default": true }
+        "manual_review_required": {
+          "type": "boolean",
+          "default": true
+        },
+        "generate_contact_sheet": {
+          "type": "boolean",
+          "default": true
+        },
+        "formula_check_required": {
+          "type": "boolean",
+          "default": true
+        }
       }
     }
   },
   "$defs": {
     "scene": {
       "type": "object",
-      "required": ["id", "title", "duration", "formula", "chart_type", "animation"],
+      "required": [
+        "id",
+        "title",
+        "duration",
+        "formula",
+        "chart_type",
+        "animation"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
-        "title": { "type": "string", "minLength": 1 },
-        "subtitle": { "type": "string" },
-        "duration": { "type": "number", "exclusiveMinimum": 0 },
-        "formula": { "$ref": "#/$defs/formula" },
-        "explanation": { "type": "string" },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "formula": {
+          "$ref": "#/$defs/formula"
+        },
+        "explanation": {
+          "type": "string"
+        },
         "chart_type": {
           "type": "string",
           "enum": [
@@ -95,84 +215,172 @@
             "matrix_heatmap",
             "equation_derivation",
             "phase_space",
-            "causal_diagram"
+            "causal_diagram",
+            "rotating_surface"
           ]
         },
-        "data_source": { "$ref": "#/$defs/data_source" },
-        "animation": { "$ref": "#/$defs/animation" },
+        "data_source": {
+          "$ref": "#/$defs/data_source"
+        },
+        "animation": {
+          "$ref": "#/$defs/animation"
+        },
         "emphasis": {
           "type": "array",
-          "items": { "$ref": "#/$defs/emphasis" }
+          "items": {
+            "$ref": "#/$defs/emphasis"
+          }
         },
         "captions": {
           "type": "array",
-          "items": { "$ref": "#/$defs/caption" }
+          "items": {
+            "$ref": "#/$defs/caption"
+          }
         }
       }
     },
     "formula": {
       "type": "object",
-      "required": ["format", "text"],
+      "required": [
+        "format",
+        "text"
+      ],
       "additionalProperties": false,
       "properties": {
-        "format": { "type": "string", "enum": ["unicode", "latex", "plain_text"] },
-        "text": { "type": "string", "minLength": 1 }
+        "format": {
+          "type": "string",
+          "enum": [
+            "unicode",
+            "latex",
+            "plain_text"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "data_source": {
       "type": "object",
-      "required": ["type"],
+      "required": [
+        "type"
+      ],
       "additionalProperties": true,
       "properties": {
-        "type": { "type": "string", "enum": ["synthetic", "csv", "computed", "none"] },
-        "path": { "type": "string" },
-        "shape": { "type": "string" },
-        "seed": { "type": "integer" }
+        "type": {
+          "type": "string",
+          "enum": [
+            "synthetic",
+            "csv",
+            "computed",
+            "none"
+          ]
+        },
+        "path": {
+          "type": "string"
+        },
+        "shape": {
+          "type": "string"
+        },
+        "seed": {
+          "type": "integer"
+        }
       }
     },
     "animation": {
       "type": "object",
-      "required": ["title", "formula", "chart"],
+      "required": [
+        "title",
+        "formula",
+        "chart"
+      ],
       "additionalProperties": false,
       "properties": {
-        "title": { "type": "string", "enum": ["fade_in", "slide_fade"] },
-        "formula": { "type": "string", "enum": ["fade_in", "write_on", "step_reveal"] },
+        "title": {
+          "type": "string",
+          "enum": [
+            "fade_in",
+            "slide_fade"
+          ]
+        },
+        "formula": {
+          "type": "string",
+          "enum": [
+            "fade_in",
+            "write_on",
+            "step_reveal"
+          ]
+        },
         "chart": {
           "type": "string",
-          "enum": ["draw_curve", "fade_points", "grow_area", "build_network", "reveal_matrix", "step_derivation", "none"]
+          "enum": [
+            "draw_curve",
+            "fade_points",
+            "grow_area",
+            "build_network",
+            "reveal_matrix",
+            "step_derivation",
+            "none",
+            "fade_points_then_fit_line",
+            "surface_reveal_rotate"
+          ]
         },
         "highlight": {
           "type": "string",
-          "enum": ["pulse_peak", "box_region", "trace_path", "spotlight_variable", "none"]
+          "enum": [
+            "pulse_peak",
+            "box_region",
+            "trace_path",
+            "spotlight_variable",
+            "none",
+            "minimum_point"
+          ]
         }
       }
     },
     "emphasis": {
       "type": "object",
-      "required": ["target", "label"],
+      "required": [
+        "target",
+        "label"
+      ],
       "additionalProperties": false,
       "properties": {
-        "target": { "type": "string" },
-        "label": { "type": "string" },
+        "target": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
         "time": {
           "type": "array",
           "minItems": 2,
           "maxItems": 2,
-          "items": { "type": "number" }
+          "items": {
+            "type": "number"
+          }
         }
       }
     },
     "caption": {
       "type": "object",
-      "required": ["text", "time"],
+      "required": [
+        "text",
+        "time"
+      ],
       "additionalProperties": false,
       "properties": {
-        "text": { "type": "string" },
+        "text": {
+          "type": "string"
+        },
         "time": {
           "type": "array",
           "minItems": 2,
           "maxItems": 2,
-          "items": { "type": "number" }
+          "items": {
+            "type": "number"
+          }
         }
       }
     }

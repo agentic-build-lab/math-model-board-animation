@@ -1,0 +1,27 @@
+name: validate-and-render
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install system render dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-noto-cjk
+      - name: Install Python dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Validate configs
+        run: python scripts/validate_model_video_input.py examples/garch_volatility_scene.json examples/capm_regression_scene.json examples/loss_surface_scene.json
+      - name: Unit tests
+        run: python -m unittest tests/test_validate_model_video_input.py tests/test_surface_projection.py
+      - name: Render smoke test
+        run: python scripts/render_model_video.py --config examples/garch_volatility_scene.json

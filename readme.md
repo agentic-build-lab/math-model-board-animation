@@ -38,10 +38,20 @@
 python scripts\render_model_video.py --config examples\garch_volatility_scene.json
 ```
 
-输出位置：
+输出位置使用不可覆盖版本目录：
 
-- `outputs/renders/garch_volatility_scene/garch_volatility_scene.mp4`
-- `outputs/renders/garch_volatility_scene/garch_volatility_scene_contact_sheet.jpg`
-- `outputs/renders/garch_volatility_scene/render_report.json`
+- `outputs/renders/<scene_id>/<version>_<config_slug>/<config_slug>_<version>.mp4`
+- `outputs/renders/<scene_id>/<version>_<config_slug>/<config_slug>_<version>_contact_sheet.jpg`
+- `outputs/renders/<scene_id>/<version>_<config_slug>/render_report.json`
+- `outputs/renders/<scene_id>/<version>_<config_slug>/config_snapshot.json`
+- `outputs/renders/<scene_id>/<version>_<config_slug>/changes.md`
 
 当前能力范围：`blackboard_formula` 模板 + `volatility_area` 图表。后续再扩展到更多 chart_type 和模板。
+
+
+## 当前环境审计（2026-07-05 UTC）
+
+- Python 渲染链路：PIL + numpy 可运行。
+- 字体：已加入 Windows / Linux 字体 fallback；当前云端无 CJK 字体，中文可能显示为 fallback 字形，适合流程验证但不适合最终发布。
+- 视频编码：当前云端缺少 `ffmpeg`，且 apt/pip 受 403 代理限制，无法在本轮生成真实 mp4；contact sheet 和 render report 可生成。
+- 第二模型样片：`examples/capm_regression_scene.json` 已验证散点回归图表路径。
