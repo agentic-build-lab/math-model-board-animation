@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-07-05T10:10:00Z",
+  "samples": [
+    {
+      "scene_id": "garch_volatility_memory",
+      "version": "v20260705T100110Z",
+      "quality_label": "candidate",
+      "recommended_as_case": true,
+      "config": "examples/garch_volatility_scene.json",
+      "command": "python scripts/render_model_video.py --config examples/garch_volatility_scene.json",
+      "output_dir": "outputs/renders/garch_volatility_memory/v20260705T100110Z_garch_volatility_scene/",
+      "preview_html": "outputs/renders/garch_volatility_memory/v20260705T100110Z_garch_volatility_scene/preview.html",
+      "review_notes": "outputs/renders/garch_volatility_memory/v20260705T100110Z_garch_volatility_scene/review_notes.md",
+      "recipe": "docs/recipes/garch_candidate_recipe.md"
+    },
+    {
+      "scene_id": "capm_beta_regression",
+      "version": "v20260705T100222Z",
+      "quality_label": "candidate",
+      "recommended_as_case": true,
+      "config": "examples/capm_regression_scene.json",
+      "command": "python scripts/render_model_video.py --config examples/capm_regression_scene.json",
+      "output_dir": "outputs/renders/capm_beta_regression/v20260705T100222Z_capm_regression_scene/",
+      "preview_html": "outputs/renders/capm_beta_regression/v20260705T100222Z_capm_regression_scene/preview.html",
+      "review_notes": "outputs/renders/capm_beta_regression/v20260705T100222Z_capm_regression_scene/review_notes.md"
+    },
+    {
+      "scene_id": "loss_surface_minimum",
+      "version": "v20260705T100313Z",
+      "quality_label": "prototype",
+      "recommended_as_case": false,
+      "config": "examples/loss_surface_scene.json",
+      "command": "python scripts/render_model_video.py --config examples/loss_surface_scene.json",
+      "output_dir": "outputs/renders/loss_surface_minimum/v20260705T100313Z_loss_surface_scene/",
+      "preview_html": "outputs/renders/loss_surface_minimum/v20260705T100313Z_loss_surface_scene/preview.html",
+      "review_notes": "outputs/renders/loss_surface_minimum/v20260705T100313Z_loss_surface_scene/review_notes.md"
+    }
+  ]
+}

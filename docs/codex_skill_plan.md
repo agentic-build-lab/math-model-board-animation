@@ -148,3 +148,11 @@ Do not sacrifice visual quality for automation. Always preserve a manual review 
 - GARCH：浅红填充、明亮细轮廓、峰值有空间余量。
 - CAPM：点云透明但不虚，拟合线为视觉主线，字幕解释 beta。
 - Loss surface：网格应服务曲面结构，不做廉价 HUD；金色控制点是唯一强强调。
+
+## 2026-07-05 sample gallery / recipe 素材
+
+- 样片索引：`docs/sample_gallery.md`。
+- 机器可读 gallery manifest：`docs/sample_gallery_manifest.json`。
+- 媒体保留策略：`docs/media_retention_policy.md`。
+- 当前最值得沉淀为 skill recipe 的样片：GARCH volatility memory candidate，复现记录在 `docs/recipes/garch_candidate_recipe.md`。
+- 当前不把任何 `outputs/renders/**` 媒体提交进 Git；只提交 config、recipe、review gate 和 manifest 指针。
