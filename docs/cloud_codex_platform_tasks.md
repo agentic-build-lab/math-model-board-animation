@@ -4,6 +4,14 @@ Use these tasks as handoff prompts for Codex web/cloud. They are written so the
 cloud agent can work from GitHub without relying on local browser state or large
 raw media.
 
+For long-running work, use:
+
+- `.github/codex/prompts/long_running_platform_expansion.md`
+
+The long-running prompt instructs Codex to work through this backlog in order,
+commit small milestones, update docs, and stop only when blocked or when the
+backlog is complete.
+
 ## Task 1: YouTube Public Adapter
 
 Goal:
