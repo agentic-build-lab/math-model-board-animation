@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.agentic_build_lab/schemas/content_experiment_state.schema.json",
+  "title": "content_experiment_state",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "project_name",
+    "content_form",
+    "rubric_version",
+    "calibration_samples",
+    "confidence",
+    "enabled_trend_sources",
+    "enabled_perf_adapters",
+    "learning_artifacts",
+    "blind_boundary",
+    "initialized_at"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string" },
+    "project_name": { "type": "string", "minLength": 1 },
+    "content_form": { "type": "string", "minLength": 1 },
+    "typical_duration_seconds": { "type": "integer", "minimum": 1 },
+    "target_publish_cadence_days": { "type": ["integer", "null"], "minimum": 1 },
+    "rubric_version": { "type": "string", "minLength": 1 },
+    "calibration_samples": { "type": "integer", "minimum": 0 },
+    "calibration_samples_at_last_bump": { "type": "integer", "minimum": 0 },
+    "confidence": {
+      "type": "object",
+      "required": ["key", "label", "calibration_samples"],
+      "additionalProperties": true,
+      "properties": {
+        "key": {
+          "type": "string",
+          "enum": ["none", "very_low", "low", "medium", "high", "data_driven"]
+        },
+        "label": { "type": "string" },
+        "calibration_samples": { "type": "integer", "minimum": 0 },
+        "error_margin_percent": { "type": ["integer", "null"] },
+        "guidance": { "type": "string" }
+      }
+    },
+    "benchmark_status": {
+      "type": "string",
+      "enum": ["none", "pending", "imported"]
+    },
+    "benchmark_name": { "type": ["string", "null"] },
+    "benchmark_sample_count": { "type": "integer", "minimum": 0 },
+    "baseline_plays": { "type": ["integer", "null"], "minimum": 0 },
+    "data_collection": {
+      "type": "string",
+      "enum": ["manual", "adapter"]
+    },
+    "enabled_trend_sources": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "enabled_perf_adapters": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "learning_artifacts": {
+      "type": "object",
+      "required": ["audience", "benchmark", "script_patterns"],
+      "properties": {
+        "audience": { "type": "string" },
+        "benchmark": { "type": "string" },
+        "script_patterns": { "type": "string" }
+      }
+    },
+    "blind_boundary": {
+      "type": "object",
+      "required": ["forbidden_for_blind_scoring", "blind_safe_rubric"],
+      "properties": {
+        "forbidden_for_blind_scoring": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "blind_safe_rubric": { "type": "string" }
+      }
+    },
+    "pending_retros": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "shoots": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "consecutive_directional_errors": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["high", "low"] }
+    },
+    "initialized_at": { "type": "string" }
+  }
+}

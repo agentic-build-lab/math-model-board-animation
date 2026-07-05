@@ -32,6 +32,8 @@ or platform-specific scraper assumptions.
   rendering. See `douyin_session_contract.md`.
 - Xiaohongshu explore adapter: public page fallback + creator/authorized data
   track + report rendering. See `xiaohongshu_contract.md`.
+- LinkedIn session adapter: authorized post analytics through a persistent
+  browser context. See `linkedin_session_contract.md`.
 
 Implementation should happen in a separate milestone only after the target
 platform's authorization and compliance boundary is clear.

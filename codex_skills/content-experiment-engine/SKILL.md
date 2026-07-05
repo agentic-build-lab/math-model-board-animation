@@ -38,10 +38,15 @@ Prefer JSON, SQLite, and CLI contracts over ad hoc notes.
    - Import it to SQLite with `--database` when it should be used across workflows.
    - Keep downloading, ASR, and publishing outside this normalization step.
 
-6. User wants a project status or handoff:
+6. User wants to initialize long-term learning artifacts:
+   - Use `scripts/initialize_content_learning_artifacts.py`.
+   - Keep `audience.md`, `benchmark.md`, and `script_patterns.md` out of blind scoring prompts.
+   - Use `scripts/check_blind_boundaries.py` before treating a rules file as blind-safe context.
+
+7. User wants a project status or handoff:
    - Export a markdown report with `scripts/export_content_review.py`.
 
-7. User asks whether a trend can affect trading:
+8. User asks whether a trend can affect trading:
    - Treat it as a research hypothesis only.
    - Require entity linking, event timestamps, market data validation, and leakage checks.
    - Do not treat social heat as a direct trading signal.
@@ -140,6 +145,22 @@ python scripts\export_calibration_report.py `
   --output-csv outputs\content_experiment\calibration_samples.csv
 ```
 
+Initialize learning artifacts:
+
+```powershell
+python scripts\initialize_content_learning_artifacts.py `
+  --output-dir outputs\content_experiment\learning_workspace `
+  --project-name evidence_video_account `
+  --benchmark-name "reference creator" `
+  --platform youtube
+```
+
+Check blind boundaries:
+
+```powershell
+python scripts\check_blind_boundaries.py rubric_notes.md
+```
+
 ## Output Contracts
 
 - Candidate schema: `schemas/content_candidate.schema.json`
@@ -147,6 +168,7 @@ python scripts\export_calibration_report.py `
 - Public video snapshot schema: `schemas/content_video_snapshot.schema.json`
 - Transcript artifact schema: `schemas/transcript_artifact.schema.json`
 - Platform profile schema: `schemas/platform_profile.schema.json`
+- State schema: `schemas/content_experiment_state.schema.json`
 - SQLite schema: `schemas/content_experiment.schema.sql`
 
 ## Rules
@@ -165,3 +187,11 @@ python scripts\export_calibration_report.py `
 - Module guide: `docs/content_experiment_module.md`
 - Calibration protocol: `docs/calibration_protocol.md`
 - Experimental platform adapter contracts: `integrations/experimental_platform_adapters/`
+- Learning artifacts: `docs/content_learning_artifacts.md`
+- State protocol: `docs/content_state_protocol.md`
+- Blind prediction protocol: `docs/blind_prediction_protocol.md`
+- Starter rubrics: `docs/starter_content_rubrics.md`
+- Observation lifecycle: `docs/observation_lifecycle_protocol.md`
+- Trend source routing: `docs/trend_source_routing.md`
+- Experimental trend sources: `integrations/experimental_trend_sources/`
+- Experimental script extraction: `integrations/experimental_script_extraction/`

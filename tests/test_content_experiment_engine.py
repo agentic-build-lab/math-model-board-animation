@@ -39,6 +39,17 @@ from packages.content_experiment_engine.calibration_reports import (
     collect_calibration_samples,
     render_calibration_markdown,
 )
+from packages.content_experiment_engine.blind_boundaries import (
+    find_blind_metric_leaks,
+    is_forbidden_for_blind_scoring,
+)
+from packages.content_experiment_engine.content_state import (
+    confidence_for_samples,
+    create_initial_state,
+    read_state,
+    write_state,
+)
+from packages.content_experiment_engine.learning_artifacts import initialize_learning_artifacts
 from packages.content_experiment_engine.transcripts import (
     create_transcript_artifact,
     normalize_transcript_text,
@@ -188,6 +199,55 @@ class CalibrationReportTests(unittest.TestCase):
             report = render_calibration_markdown(samples, window=1)
             self.assertIn("Mean absolute error", report)
             self.assertIn("30-100w", report)
+
+
+class ContentStateTests(unittest.TestCase):
+    def test_confidence_for_samples_uses_expected_bands(self) -> None:
+        self.assertEqual(confidence_for_samples(0)["key"], "none")
+        self.assertEqual(confidence_for_samples(7)["key"], "medium")
+        self.assertEqual(confidence_for_samples(21)["key"], "data_driven")
+
+    def test_state_write_and_read_merges_defaults(self) -> None:
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "content_experiment_state.json"
+            state = create_initial_state(project_name="demo", typical_duration_seconds=120)
+            write_state(path, state)
+            loaded = read_state(path)
+            self.assertEqual(loaded["project_name"], "demo")
+            self.assertEqual(loaded["confidence"]["key"], "none")
+            self.assertIn("audience.md", loaded["blind_boundary"]["forbidden_for_blind_scoring"])
+
+
+class LearningArtifactTests(unittest.TestCase):
+    def test_initialize_learning_artifacts_writes_expected_files(self) -> None:
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            written = initialize_learning_artifacts(
+                root,
+                project_name="demo",
+                benchmark_name="sample_benchmark",
+                platform="youtube",
+            )
+            names = {path.name for path in written}
+            self.assertIn("audience.md", names)
+            self.assertIn("benchmark.md", names)
+            self.assertIn("script_patterns.md", names)
+            self.assertIn("content_experiment_state.json", names)
+            self.assertIn("sample_benchmark", (root / "benchmark.md").read_text(encoding="utf-8"))
+
+
+class BlindBoundaryTests(unittest.TestCase):
+    def test_metric_leak_detection_ignores_bucket_boundaries(self) -> None:
+        safe = "Bucket boundaries: 5-30w / 30-100w / >100w"
+        unsafe = "Actual plays reached 80w after T+3 review."
+        self.assertEqual(find_blind_metric_leaks(safe), [])
+        leaks = find_blind_metric_leaks(unsafe)
+        self.assertEqual(len(leaks), 1)
+        self.assertIn("Actual", leaks[0].excerpt)
+
+    def test_forbidden_blind_scoring_files(self) -> None:
+        self.assertTrue(is_forbidden_for_blind_scoring("audience.md"))
+        self.assertFalse(is_forbidden_for_blind_scoring("rubric_notes.md"))
 
 
 class TranscriptTests(unittest.TestCase):

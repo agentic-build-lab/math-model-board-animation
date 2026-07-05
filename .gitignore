@@ -13,7 +13,11 @@ work/
 # Browser login state, crawler diagnostics, and content experiment runtime data
 .auth/
 .auth-xhs/
+.auth-linkedin/
+.auth-youtube/
+.auth-tiktok/
 .cheat-cache/
+content_experiment_state.json.backup-*
 videos/
 
 # Generated frame sequences

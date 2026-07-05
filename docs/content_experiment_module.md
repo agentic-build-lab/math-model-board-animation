@@ -115,6 +115,27 @@ python scripts\export_calibration_report.py `
 The adapted calibration protocol is documented in
 `docs/calibration_protocol.md`.
 
+Long-term learning artifacts and blind-boundary checks:
+
+```powershell
+python scripts\initialize_content_learning_artifacts.py `
+  --output-dir outputs\content_experiment\learning_workspace `
+  --project-name evidence_video_account `
+  --benchmark-name "reference creator" `
+  --platform youtube
+
+python scripts\check_blind_boundaries.py rubric_notes.md
+```
+
+Related docs:
+
+- `docs/content_learning_artifacts.md`
+- `docs/content_state_protocol.md`
+- `docs/blind_prediction_protocol.md`
+- `docs/starter_content_rubrics.md`
+- `docs/observation_lifecycle_protocol.md`
+- `docs/trend_source_routing.md`
+
 Transcript artifact generation adapts the upstream Whisper idea into a
 Codex-friendly contract. The project does not force one ASR engine; it accepts
 manual text, SRT, VTT, Whisper output, or cloud ASR output and normalizes it
@@ -183,3 +204,5 @@ Recommended downstream users:
   response URLs so failures can be debugged later.
 - Keep ASR, downloading, and publishing as separate stages. Transcript artifacts
   should be normalized before downstream analysis.
+- Keep `audience.md`, `benchmark.md`, `script_patterns.md`, and `rubric-memo.md`
+  out of blind scoring prompts because they can contain retrospective data.

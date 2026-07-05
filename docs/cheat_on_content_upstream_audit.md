@@ -26,6 +26,10 @@ interfaces.
   cloud ASR service.
 - Text-diff and calibration reports: script changes and prediction error are
   measured with local, dependency-light tools.
+- Audience, benchmark, and script-pattern artifacts: migrated as local templates
+  and protocols rather than Claude-specific skills.
+- State management and blind-boundary checks: migrated as ordinary Python
+  modules and CLI commands.
 
 ## What We Did Not Vendor
 
@@ -48,6 +52,8 @@ interfaces.
   `integrations/experimental_platform_adapters/xiaohongshu_contract.md`;
   executable crawler is intentionally not vendored yet.
 - LinkedIn session adapter, only for the user's own account or permitted pages.
+  Migrated as an isolated contract in
+  `integrations/experimental_platform_adapters/linkedin_session_contract.md`.
 - Douyin session adapter. Migrated as an isolated contract in
   `integrations/experimental_platform_adapters/douyin_session_contract.md`;
   executable crawler is intentionally not vendored yet.
@@ -67,6 +73,17 @@ interfaces.
   `compare_text_similarity.py`.
 - Upstream `score-curve.py`. Adapted locally as `calibration_reports.py` and
   `export_calibration_report.py`.
+- Upstream `audience.template.md`, `benchmark.template.md`, and
+  `script_patterns.template.md`. Adapted locally as `learning_artifacts.py` and
+  `initialize_content_learning_artifacts.py`.
+- Upstream state, blind-prediction, and observation-lifecycle protocols.
+  Adapted locally as `content_state.py`, `blind_boundaries.py`, and docs under
+  `docs/`.
+- Upstream data-source routing. Adapted locally as `docs/trend_source_routing.md`
+  plus explicit trend-source contracts.
+- Upstream `aihot`, `trendradar-mcp`, and `whisper` adapter notes. Migrated as
+  isolated contracts under `integrations/experimental_trend_sources/` and
+  `integrations/experimental_script_extraction/`.
 
 ## Current Local Module
 
@@ -83,6 +100,11 @@ Current interfaces:
 - `prediction_records`: immutable prediction markdown and retro appends.
 - `text_similarity`: normalized script/transcript difference checks.
 - `calibration_reports`: prediction error reports and calibration samples.
+- `content_state`: local state schema, confidence bands, and atomic writes.
+- `learning_artifacts`: audience, benchmark, and script pattern template
+  generation.
+- `blind_boundaries`: checks for files and metric leakage that should not enter
+  blind scoring.
 - `transcripts`: normalized transcript JSON/markdown artifacts.
 - `review_report`: human-readable SQLite review markdown.
 - `snapshot_store`: SQLite schema bootstrap and snapshot import.
