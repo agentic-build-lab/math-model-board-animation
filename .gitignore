@@ -10,6 +10,11 @@ venv/
 # Render scratch files and imported references
 work/
 
+# Browser login state, crawler diagnostics, and content experiment runtime data
+.auth/
+.cheat-cache/
+videos/
+
 # Generated frame sequences
 frames/
 *_frames/
@@ -17,6 +22,7 @@ frames/
 # Keep render outputs out of git by default.
 # Commit selected small samples explicitly with `git add -f` when needed.
 outputs/renders/
+outputs/content_experiment/
 
 # Large media exports
 *.mov

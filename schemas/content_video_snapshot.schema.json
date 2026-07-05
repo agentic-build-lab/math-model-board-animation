@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.agentic_build_lab/schemas/content_video_snapshot.schema.json",
+  "title": "content_video_snapshot",
+  "type": "object",
+  "required": ["schema_version", "source", "video", "metrics", "comments", "evidence", "limitations"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0" },
+    "source": {
+      "type": "object",
+      "required": ["platform", "adapter", "url", "resolved_url", "aweme_id", "fetched_at"],
+      "additionalProperties": false,
+      "properties": {
+        "platform": { "type": "string", "enum": ["douyin"] },
+        "adapter": { "type": "string" },
+        "url": { "type": "string" },
+        "resolved_url": { "type": "string" },
+        "aweme_id": { "type": ["string", "null"] },
+        "fetched_at": { "type": "string" }
+      }
+    },
+    "video": {
+      "type": "object",
+      "required": ["title", "description", "author", "created_at", "duration_ms"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": ["string", "null"] },
+        "description": { "type": ["string", "null"] },
+        "author": { "type": ["string", "null"] },
+        "created_at": { "type": ["string", "null"] },
+        "duration_ms": { "type": ["integer", "null"] }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["play_count", "like_count", "comment_count", "share_count", "collect_count"],
+      "additionalProperties": false,
+      "properties": {
+        "play_count": { "type": ["integer", "null"] },
+        "like_count": { "type": ["integer", "null"] },
+        "comment_count": { "type": ["integer", "null"] },
+        "share_count": { "type": ["integer", "null"] },
+        "collect_count": { "type": ["integer", "null"] }
+      }
+    },
+    "comments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "text", "like_count", "reply_count", "created_at", "user_name", "ip_label"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "text": { "type": "string" },
+          "like_count": { "type": "integer" },
+          "reply_count": { "type": "integer" },
+          "created_at": { "type": ["string", "null"] },
+          "user_name": { "type": "string" },
+          "ip_label": { "type": "string" }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["screenshot_path", "raw_response_path", "captured_api_urls"],
+      "additionalProperties": false,
+      "properties": {
+        "screenshot_path": { "type": "string" },
+        "raw_response_path": { "type": "string" },
+        "captured_api_urls": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
