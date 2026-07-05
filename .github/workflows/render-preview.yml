@@ -1,0 +1,74 @@
+name: Render preview
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+      - "codex/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: render-preview-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Validate and render sample video
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONUTF8: "1"
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install render runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            ffmpeg \
+            fonts-dejavu-core \
+            fonts-noto-cjk \
+            fonts-noto-color-emoji
+          ffmpeg -version | head -n 1
+          fc-match "Noto Sans CJK SC" || true
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pytest
+
+      - name: Run tests
+        run: python -m unittest discover -s tests
+
+      - name: Render GARCH preview
+        run: |
+          python scripts/render_model_video.py \
+            --config examples/garch_volatility_scene.json \
+            --output-dir outputs/renders/ci_garch_volatility_scene
+
+      - name: Check render outputs
+        run: |
+          test -f outputs/renders/ci_garch_volatility_scene/garch_volatility_scene.mp4
+          test -f outputs/renders/ci_garch_volatility_scene/garch_volatility_scene_contact_sheet.jpg
+          test -f outputs/renders/ci_garch_volatility_scene/render_report.json
+
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: math-model-board-animation-preview
+          path: outputs/renders/ci_garch_volatility_scene/**
+          retention-days: 14
+          if-no-files-found: error
