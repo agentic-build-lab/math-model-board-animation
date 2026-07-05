@@ -1,0 +1,47 @@
+project:
+  title: GARCH 波动率模型
+  domain: quant_finance
+  audience: 有基础金融知识的短视频观众
+  objective: 用一条波动率面积图解释 GARCH 的记忆性和聚集性
+
+video:
+  aspect_ratio: "16:9"
+  width: 1920
+  height: 1080
+  fps: 60
+  language: zh-CN
+  duration: 3.9
+
+style:
+  template: blackboard_formula
+  palette: black_teal_red
+  quality: publish_review
+
+narration:
+  mode: caption_first
+  subtitle_position: bottom_safe_area
+
+scenes:
+  - id: garch_volatility_memory
+    title: 4. GARCH 波动率模型
+    subtitle: 捕捉金融市场波动率的记忆性与聚集性
+    duration: 3.9
+    formula:
+      format: unicode
+      text: σₜ² = α₀ + α₁ε²ₜ₋₁ + β₁σ²ₜ₋₁
+    explanation: 波动率不是随机乱跳，它会在冲击之后持续一段时间。
+    chart_type: volatility_area
+    data_source:
+      type: synthetic
+      shape: clustered_volatility
+      seed: 20260705
+    animation:
+      title: fade_in
+      formula: fade_in
+      chart: grow_area
+      highlight: none
+
+quality:
+  manual_review_required: true
+  generate_contact_sheet: true
+  formula_check_required: true
