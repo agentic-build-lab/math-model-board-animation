@@ -44,7 +44,33 @@
         "formula": "fade_in",
         "chart": "grow_area",
         "highlight": "none"
-      }
+      },
+      "timing_events": [
+        {
+          "start_ms": 0,
+          "end_ms": 1200,
+          "visual_action": "title and subtitle fade in; empty chart space establishes premium blackboard mood",
+          "camera_action": "locked wide frame",
+          "text_density": "low",
+          "comfort_note": "first hook stays visual; no paragraph text"
+        },
+        {
+          "start_ms": 1200,
+          "end_ms": 2600,
+          "visual_action": "axis settles and volatility curve begins drawing with shallow area fill",
+          "camera_action": "locked wide frame",
+          "text_density": "medium",
+          "comfort_note": "formula appears only after chart motion starts"
+        },
+        {
+          "start_ms": 2600,
+          "end_ms": 3900,
+          "visual_action": "volatility cluster completes; formula remains readable for teaching pause",
+          "camera_action": "locked wide frame with no shake",
+          "text_density": "medium",
+          "comfort_note": "end frame should be paused for explanation; avoid extra flashing"
+        }
+      ]
     }
   ],
   "quality": {

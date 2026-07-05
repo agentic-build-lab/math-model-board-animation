@@ -236,6 +236,12 @@
           "items": {
             "$ref": "#/$defs/caption"
           }
+        },
+        "timing_events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/timing_event"
+          }
         }
       }
     },
@@ -381,6 +387,49 @@
           "items": {
             "type": "number"
           }
+        }
+      }
+    },
+    "timing_event": {
+      "type": "object",
+      "required": [
+        "start_ms",
+        "end_ms",
+        "visual_action",
+        "camera_action",
+        "text_density",
+        "comfort_note"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "start_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "visual_action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "camera_action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_density": {
+          "type": "string",
+          "enum": [
+            "none",
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "comfort_note": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }

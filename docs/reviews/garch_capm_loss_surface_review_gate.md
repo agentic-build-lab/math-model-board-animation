@@ -25,3 +25,29 @@
 - Current target: cyan grid, low blur glow, gold focus point, slow oscillating viewing angle.
 - Pass if the surface shape is legible from contact sheet and draft WebP preview.
 - Fail if the grid looks like generic sci-fi decoration without communicating model landscape.
+
+## Rhythm review overlay
+
+### GARCH compressed timing
+
+| start_ms | end_ms | visual_action | camera_action | text_density | comfort_note |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 1200 | Title/subtitle fade in; empty chart stage | Locked wide | low | Hook should feel visual, not textual |
+| 1200 | 2600 | Axis + curve + shallow area build | Locked wide | medium | Keep red fill soft |
+| 2600 | 3900 | Cluster completes and formula holds | Locked wide | medium | Final frame must be pause-ready |
+
+### CAPM compressed timing
+
+| start_ms | end_ms | visual_action | camera_action | text_density | comfort_note |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 900 | Title and return-return plane | Locked wide | low | Do not show too many words before points |
+| 900 | 2200 | Teal observations fade into cloud | Locked wide | medium | Points should read as data, not particles |
+| 2200 | 4200 | Gold beta line draws and holds | Locked wide | medium | Line is the conclusion; hold it cleanly |
+
+### Loss surface compressed timing
+
+| start_ms | end_ms | visual_action | camera_action | text_density | comfort_note |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 1000 | Title reveals; empty 3D stage breathes | Locked wide | low | Avoid HUD clutter |
+| 1000 | 2400 | Cyan surface grid constructs with slow rotation | Subtle orbit | medium | Motion must not feel decorative |
+| 2400 | 3600 | Gold focus point and formula hold | Rotation slows | medium | End frame should support narration |

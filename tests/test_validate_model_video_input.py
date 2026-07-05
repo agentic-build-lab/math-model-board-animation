@@ -22,6 +22,12 @@ class ValidateModelVideoInputTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "chart_type"):
             validate_config(config, self.schema)
 
+    def test_timing_event_overlap_fails(self) -> None:
+        config = json.loads(Path("examples/garch_volatility_scene.json").read_text(encoding="utf-8"))
+        config["scenes"][0]["timing_events"][1]["start_ms"] = 500
+        with self.assertRaisesRegex(ValueError, "overlaps"):
+            validate_config(config, self.schema)
+
     def test_cli_import_has_no_side_effects(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             self.assertTrue(Path(temp_dir).exists())

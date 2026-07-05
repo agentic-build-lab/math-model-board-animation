@@ -28,9 +28,9 @@ python scripts/render_model_video.py --config examples/garch_volatility_scene.js
 
 ## Latest reviewed output
 
-- Directory: `outputs/renders/garch_volatility_memory/v20260705T100110Z_garch_volatility_scene/`
+- Directory: `outputs/renders/garch_volatility_memory/v20260705T103218Z_garch_volatility_scene/`
 - Draft preview: `preview.html`
-- Contact sheet: `garch_volatility_scene_v20260705T100110Z_contact_sheet.jpg`
+- Contact sheet: `garch_volatility_scene_v20260705T103218Z_contact_sheet.jpg`
 - Report: `render_report.json`
 - Review gate: `review_notes.md`
 
@@ -46,3 +46,13 @@ python scripts/render_model_video.py --config examples/garch_volatility_scene.js
 - Over-strong glow makes the line feel neon rather than premium.
 - Peak mapping too high collides visually with title/subtitle area.
 - Without ffmpeg, WebP/HTML preview is useful for draft motion screening but cannot replace final mp4 review.
+
+## Rhythm event map
+
+| start_ms | end_ms | visual_action | camera_action | text_density | comfort_note |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 1200 | Title/subtitle fade in; chart space establishes mood | Locked wide frame | low | First hook stays visual; no paragraph text |
+| 1200 | 2600 | Axis settles; volatility curve and shallow area begin drawing | Locked wide frame | medium | Formula appears after chart motion starts |
+| 2600 | 3900 | Volatility cluster completes; formula remains readable | Locked wide frame | medium | End frame should pause cleanly for explanation |
+
+For a 20-24 second teaching version, expand the middle construction into separate beats for calm period, shock, clustering, and decay instead of making the curve appear as one continuous reveal.

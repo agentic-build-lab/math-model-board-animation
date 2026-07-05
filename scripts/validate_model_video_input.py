@@ -54,6 +54,24 @@ def validate_config(config: dict[str, Any], schema: dict[str, Any]) -> None:
         assert_enum(animation["chart"], animation_schema["chart"]["enum"], f"{path}.animation.chart")
         if "highlight" in animation:
             assert_enum(animation["highlight"], animation_schema["highlight"]["enum"], f"{path}.animation.highlight")
+        if "timing_events" in scene:
+            validate_timing_events(scene["timing_events"], path)
+
+
+def validate_timing_events(events: Any, path: str) -> None:
+    if not isinstance(events, list) or not events:
+        raise ValueError(f"{path}.timing_events must be a non-empty list when provided")
+    previous_end = 0
+    for index, event in enumerate(events):
+        event_path = f"{path}.timing_events[{index}]"
+        require_keys(event, ["start_ms", "end_ms", "visual_action", "camera_action", "text_density", "comfort_note"], event_path)
+        if event["text_density"] not in ["none", "low", "medium", "high"]:
+            raise ValueError(f"{event_path}.text_density={event['text_density']!r} is invalid")
+        if int(event["start_ms"]) < previous_end:
+            raise ValueError(f"{event_path}.start_ms overlaps previous event")
+        if int(event["end_ms"]) <= int(event["start_ms"]):
+            raise ValueError(f"{event_path}.end_ms must be greater than start_ms")
+        previous_end = int(event["end_ms"])
 
 
 def require_keys(value: dict[str, Any], keys: list[str], path: str) -> None:

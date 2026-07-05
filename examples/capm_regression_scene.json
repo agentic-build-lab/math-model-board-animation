@@ -64,6 +64,32 @@
             4.2
           ]
         }
+      ],
+      "timing_events": [
+        {
+          "start_ms": 0,
+          "end_ms": 900,
+          "visual_action": "title/subtitle reveal; axes establish return-return plane",
+          "camera_action": "locked wide frame",
+          "text_density": "low",
+          "comfort_note": "do not introduce formula before viewer sees the plane"
+        },
+        {
+          "start_ms": 900,
+          "end_ms": 2200,
+          "visual_action": "teal observations fade in as a statistical cloud",
+          "camera_action": "locked wide frame",
+          "text_density": "medium",
+          "comfort_note": "point opacity stays moderate so dots do not look like noisy particles"
+        },
+        {
+          "start_ms": 2200,
+          "end_ms": 4200,
+          "visual_action": "gold beta fit line draws through cloud; formula remains visible for pause",
+          "camera_action": "locked wide frame",
+          "text_density": "medium",
+          "comfort_note": "line is the conclusion; keep final frame stable"
+        }
       ]
     }
   ],

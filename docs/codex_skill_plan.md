@@ -156,3 +156,10 @@ Do not sacrifice visual quality for automation. Always preserve a manual review 
 - 媒体保留策略：`docs/media_retention_policy.md`。
 - 当前最值得沉淀为 skill recipe 的样片：GARCH volatility memory candidate，复现记录在 `docs/recipes/garch_candidate_recipe.md`。
 - 当前不把任何 `outputs/renders/**` 媒体提交进 Git；只提交 config、recipe、review gate 和 manifest 指针。
+
+## 2026-07-05 rhythm grammar 素材
+
+- 参考节奏拆解：`docs/reference_style_rhythm_study.md`。
+- 可复用 timing grammar：`docs/rhythm_timing_grammar.md`。
+- 三个样片 config 均加入 `timing_events`，每个事件包含 `start_ms`, `end_ms`, `visual_action`, `camera_action`, `text_density`, `comfort_note`。
+- skill 执行时应先生成 timing events，再渲染；如果没有 mp4，则用 `preview.html` + contact sheet 做 draft rhythm review。
