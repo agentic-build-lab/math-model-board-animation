@@ -60,6 +60,32 @@
             3.6
           ]
         }
+      ],
+      "timing_events": [
+        {
+          "start_ms": 0,
+          "end_ms": 1000,
+          "visual_action": "title reveals and empty 3D stage breathes before grid appears",
+          "camera_action": "locked wide frame",
+          "text_density": "low",
+          "comfort_note": "avoid sci-fi HUD clutter in the hook"
+        },
+        {
+          "start_ms": 1000,
+          "end_ms": 2400,
+          "visual_action": "cyan surface grid progressively constructs with slow rotation",
+          "camera_action": "subtle orbit only; no fast zoom",
+          "text_density": "medium",
+          "comfort_note": "grid density must communicate surface, not decoration"
+        },
+        {
+          "start_ms": 2400,
+          "end_ms": 3600,
+          "visual_action": "gold focus point holds; formula and surface remain as teaching pause",
+          "camera_action": "rotation slows into stable end frame",
+          "text_density": "medium",
+          "comfort_note": "ending must be readable enough for instructor narration"
+        }
       ]
     }
   ],
