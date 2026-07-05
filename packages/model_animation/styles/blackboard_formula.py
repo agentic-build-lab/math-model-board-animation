@@ -8,6 +8,7 @@ import numpy as np
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 from model_animation.easing import clamp, ease_out, lerp
+from model_animation.charts.surface import project_loss_surface
 from model_animation.render_context import (
     RenderContext,
     draw_centered_text,
@@ -69,10 +70,14 @@ class BlackboardFormulaRenderer:
         draw = ImageDraw.Draw(image, "RGBA")
 
         scene, scene_t = self._scene_at(t)
-        if scene["chart_type"] != "volatility_area":
-            raise ValueError(f"黑板模板第一版暂不支持 chart_type={scene['chart_type']}")
-
-        self._draw_volatility_area_scene(image, draw, scene, scene_t)
+        if scene["chart_type"] == "volatility_area":
+            self._draw_volatility_area_scene(image, draw, scene, scene_t)
+        elif scene["chart_type"] == "scatter_regression":
+            self._draw_scatter_regression_scene(image, draw, scene, scene_t)
+        elif scene["chart_type"] == "rotating_surface":
+            self._draw_rotating_surface_scene(image, draw, scene, scene_t)
+        else:
+            raise ValueError(f"黑板模板暂不支持 chart_type={scene['chart_type']}")
         return image.convert("RGB")
 
     def _build_timeline(self) -> list[tuple[float, float, dict[str, Any]]]:
@@ -143,30 +148,180 @@ class BlackboardFormulaRenderer:
 
         mapped_points = self._reference_garch_points(box)
         values = np.array([box[3] - y for _, y in mapped_points], dtype=float)
-        chart_progress = ease_out((t - 0.45) / 2.2)
+        is_teaching = scene.get("animation", {}).get("chart") == "staged_volatility_teaching"
+        chart_start = 4.0 if is_teaching else 0.45
+        chart_span = 8.5 if is_teaching else 2.2
+        chart_progress = ease_out((t - chart_start) / chart_span)
         points = partial_points(mapped_points, chart_progress)
-        self._fill_under_curve(image, points, box[3], RED_FILL, alpha_low=125, alpha_high=190)
+        self._fill_under_curve(image, points, box[3], RED_FILL, alpha_low=42, alpha_high=108)
         self._line(
             image,
             points,
             RED_LINE,
-            width=3,
+            width=4,
             alpha=255,
             core_color=RED_LINE_CORE,
             core_alpha=255,
             glow_color=RED_LINE_CORE,
-            glow_alpha=150,
-            glow_width=7,
-            glow_radius=1.6,
+            glow_alpha=105,
+            glow_width=9,
+            glow_radius=1.25,
         )
 
         formula_text = scene["formula"]["text"]
-        formula_alpha = int(255 * ease_out((t - 0.9) / 0.45))
+        formula_start = 2.0 if is_teaching else 0.9
+        formula_alpha = int(255 * ease_out((t - formula_start) / 0.55))
         self._draw_formula(draw, formula_text, round(self.ctx.height * 0.755), formula_alpha)
 
         if scene.get("emphasis"):
             self._draw_emphasis(image, draw, scene, values, box, t, mapped_points)
+        if is_teaching:
+            self._draw_teaching_stage_notes(draw, scene, t, box)
         self._draw_active_caption(draw, scene, t)
+
+
+    def _draw_teaching_stage_notes(
+        self,
+        draw: ImageDraw.ImageDraw,
+        scene: dict[str, Any],
+        t: float,
+        box: tuple[int, int, int, int],
+    ) -> None:
+        if t < 6.0:
+            return
+        left, top, right, bottom = box
+        stages = [
+            (6.0, 10.0, "calm", "低波动基线"),
+            (10.0, 14.0, "shock", "冲击抬升风险"),
+            (14.0, 18.5, "clustering", "波动聚集持续"),
+            (18.5, 22.5, "decay", "冲击影响缓慢衰减"),
+        ]
+        active = None
+        for start, end, key, label in stages:
+            if start <= t < end:
+                active = (start, end, key, label)
+                break
+        if active is None:
+            return
+        start, end, key, label = active
+        alpha = int(180 * min(ease_out((t - start) / 0.45), ease_out((end - t) / 0.45)))
+        x = left + (right - left) * {"calm": 0.18, "shock": 0.50, "clustering": 0.62, "decay": 0.78}[key]
+        y = top + 26
+        draw.text((x - 58, y), label, font=self.ctx.fonts["small"], fill=rgba(GOLD, alpha))
+        draw.line((x, y + 28, x, bottom - 22), fill=rgba(GOLD, int(alpha * 0.45)), width=1)
+
+    def _draw_scatter_regression_scene(
+        self,
+        image: Image.Image,
+        draw: ImageDraw.ImageDraw,
+        scene: dict[str, Any],
+        t: float,
+    ) -> None:
+        title_alpha = int(255 * ease_out(t / 0.55))
+        draw_centered_text(draw, self.ctx, 73, scene["title"], self.ctx.fonts["title"], TEAL, title_alpha)
+        if scene.get("subtitle"):
+            draw_centered_text(draw, self.ctx, 132, scene["subtitle"], self.ctx.fonts["subtitle"], DIM, title_alpha)
+
+        axis_alpha = int(205 * ease_out((t - 0.12) / 0.35))
+        box = self._draw_axis(draw, alpha=axis_alpha)
+        left, top, right, bottom = box
+        rng = np.random.default_rng(int(scene.get("data_source", {}).get("seed", 20260705)))
+        beta = float(scene.get("parameters", {}).get("beta", 1.18))
+        alpha = float(scene.get("parameters", {}).get("alpha", 0.02))
+        x = np.linspace(-1, 1, 70)
+        y = alpha + beta * x + rng.normal(0, 0.22, len(x))
+        x_norm = (x - x.min()) / (x.max() - x.min())
+        y_norm = (y - y.min()) / (y.max() - y.min())
+        points = [(left + float(xx) * (right - left), bottom - (0.10 + float(yy) * 0.78) * (bottom - top)) for xx, yy in zip(x_norm, y_norm)]
+        point_progress = ease_out((t - 0.42) / 1.2)
+        visible = int(len(points) * point_progress)
+        for i, (px, py) in enumerate(points[:visible]):
+            pulse = 0.75 + 0.25 * math.sin(t * 2.0 + i * 0.7)
+            r = 4.2
+            draw.ellipse((px - r, py - r, px + r, py + r), fill=rgba(TEAL, int(150 * pulse)))
+        line_progress = ease_out((t - 1.15) / 1.35)
+        y1 = alpha + beta * x.min()
+        y2 = alpha + beta * x.max()
+        yn1 = (y1 - y.min()) / (y.max() - y.min())
+        yn2 = (y2 - y.min()) / (y.max() - y.min())
+        line = [(left, bottom - (0.10 + yn1 * 0.78) * (bottom - top)), (right, bottom - (0.10 + yn2 * 0.78) * (bottom - top))]
+        self._line(image, partial_points(line, line_progress), GOLD, width=4, alpha=int(235 * line_progress), core_color=WHITE, core_alpha=int(115 * line_progress), glow_color=GOLD, glow_alpha=int(85 * line_progress), glow_width=10, glow_radius=1.4)
+        formula_start = 6.0 if is_showcase else 0.9
+        formula_alpha = int(255 * ease_out((t - formula_start) / 0.65))
+        self._draw_formula(draw, scene["formula"]["text"], round(self.ctx.height * 0.755), formula_alpha)
+        self._draw_active_caption(draw, scene, t)
+
+    def _draw_rotating_surface_scene(
+        self,
+        image: Image.Image,
+        draw: ImageDraw.ImageDraw,
+        scene: dict[str, Any],
+        t: float,
+    ) -> None:
+        title_alpha = int(255 * ease_out(t / 0.55))
+        draw_centered_text(draw, self.ctx, 73, scene["title"], self.ctx.fonts["title"], TEAL, title_alpha)
+        if scene.get("subtitle"):
+            draw_centered_text(draw, self.ctx, 132, scene["subtitle"], self.ctx.fonts["subtitle"], DIM, title_alpha)
+
+        is_showcase = scene.get("animation", {}).get("chart") == "surface_showcase_orbit"
+        progress = ease_out((t - (1.6 if is_showcase else 0.32)) / (6.0 if is_showcase else 1.35))
+        cx = self.ctx.width * 0.50
+        cy = self.ctx.height * 0.47
+        scale = self.ctx.width * 0.135
+        z_scale = self.ctx.height * 0.105
+        angle_speed = 0.24 if is_showcase else 0.72
+        angle = -0.65 + 0.55 * math.sin(t * angle_speed)
+        surface = project_loss_surface(
+            center_x=cx,
+            center_y=cy,
+            scale=scale,
+            z_scale=z_scale,
+            angle=angle,
+            grid_size=25,
+        )
+        projected = surface.points
+
+        line_layer = Image.new("RGBA", image.size, (0, 0, 0, 0))
+        line_draw = ImageDraw.Draw(line_layer, "RGBA")
+        visible_cols = max(2, int(len(projected) * progress))
+        for row in projected[:visible_cols]:
+            self._surface_polyline(line_draw, row[:visible_cols], TEAL, int(92 * progress), 2)
+        for col in range(visible_cols):
+            self._surface_polyline(line_draw, [projected[row][col] for row in range(visible_cols)], TEAL, int(70 * progress), 2)
+        glow = line_layer.filter(ImageFilter.GaussianBlur(1.3))
+        image.alpha_composite(glow)
+        image.alpha_composite(line_layer)
+
+        minimum = surface.minimum
+        minimum_alpha = int(235 * ease_out((t - 1.15) / 0.75))
+        r = 7 + 2 * math.sin(t * 3.0)
+        draw.ellipse((minimum[0] - r, minimum[1] - r, minimum[0] + r, minimum[1] + r), fill=rgba(GOLD, minimum_alpha))
+        draw.line((minimum[0], minimum[1] + 10, minimum[0], minimum[1] + 78), fill=rgba(GOLD, int(120 * progress)), width=2)
+
+        label_alpha = int(150 * progress)
+        draw.text((cx - scale * 1.8, cy + scale * 0.92), "θ₁", font=self.ctx.fonts["small"], fill=rgba(AXIS, label_alpha))
+        draw.text((cx + scale * 1.48, cy + scale * 0.68), "θ₂", font=self.ctx.fonts["small"], fill=rgba(AXIS, label_alpha))
+        draw.text((minimum[0] + 16, minimum[1] - 28), "min L(θ)", font=self.ctx.fonts["small"], fill=rgba(GOLD, int(190 * progress)))
+
+        formula_start = 6.0 if is_showcase else 0.9
+        formula_alpha = int(255 * ease_out((t - formula_start) / 0.65))
+        self._draw_formula(draw, scene["formula"]["text"], round(self.ctx.height * 0.755), formula_alpha)
+        self._draw_active_caption(draw, scene, t)
+
+    def _surface_polyline(
+        self,
+        draw: ImageDraw.ImageDraw,
+        points_3d: list[tuple[float, float, float]],
+        color: tuple[int, int, int],
+        alpha: int,
+        width: int,
+    ) -> None:
+        if len(points_3d) < 2:
+            return
+        points = [(x, y) for x, y, _ in points_3d]
+        avg_z = sum(z for _, _, z in points_3d) / len(points_3d)
+        depth_alpha = int(alpha * clamp((avg_z + 1.0) / 2.3, 0.28, 1.0))
+        draw.line(points, fill=rgba(color, depth_alpha), width=width, joint="curve")
 
     def _draw_axis(
         self,
@@ -216,7 +371,7 @@ class BlackboardFormulaRenderer:
         ys = np.array([point[1] for point in REFERENCE_GARCH_PROFILE], dtype=float)
         x_norm = np.linspace(0, 1, count)
         y_norm = np.interp(x_norm, xs, ys)
-        y_norm = 0.06 + y_norm * 0.90
+        y_norm = 0.10 + y_norm * 0.76
         return [
             (
                 left + float(x) * (right - left),

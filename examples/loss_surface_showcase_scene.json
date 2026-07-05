@@ -1,0 +1,127 @@
+{
+  "project": {
+    "title": "AI 模型训练：损失曲面高级展示版",
+    "domain": "machine_learning",
+    "audience": "AI/数学模型短视频观众",
+    "objective": "用旋转损失曲面表现参数搜索、最优点和模型训练的专业感"
+  },
+  "video": {
+    "aspect_ratio": "16:9",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "language": "zh-CN",
+    "duration": 30.0
+  },
+  "style": {
+    "template": "blackboard_formula",
+    "palette": "black_teal_gold",
+    "quality": "publish_review"
+  },
+  "narration": {
+    "mode": "caption_first",
+    "subtitle_position": "bottom_safe_area"
+  },
+  "scenes": [
+    {
+      "id": "loss_surface_showcase",
+      "title": "AI Model Landscape",
+      "subtitle": "参数空间里的损失曲面与最优点",
+      "duration": 30.0,
+      "formula": {
+        "format": "unicode",
+        "text": "θ* = argminθ  L(θ)"
+      },
+      "explanation": "用高级但克制的伪 3D 曲面展示模型训练如何寻找更低损失。",
+      "chart_type": "rotating_surface",
+      "data_source": {
+        "type": "computed",
+        "shape": "smooth_loss_basin",
+        "seed": 20260708
+      },
+      "animation": {
+        "title": "fade_in",
+        "formula": "fade_in",
+        "chart": "surface_showcase_orbit",
+        "highlight": "minimum_point"
+      },
+      "timing_events": [
+        {
+          "start_ms": 0,
+          "end_ms": 2000,
+          "visual_action": "first visual hook: dark field, title, and empty 3D stage",
+          "camera_action": "locked wide frame",
+          "text_density": "low",
+          "comfort_note": "premium opening; no dense text"
+        },
+        {
+          "start_ms": 2000,
+          "end_ms": 6000,
+          "visual_action": "cyan loss surface starts constructing from sparse grid",
+          "camera_action": "very slow orbit begins",
+          "text_density": "low",
+          "comfort_note": "surface must read as model landscape, not decoration"
+        },
+        {
+          "start_ms": 6000,
+          "end_ms": 14000,
+          "visual_action": "surface completes; parameter axes and formula appear",
+          "camera_action": "slow orbit with no shake",
+          "text_density": "medium",
+          "comfort_note": "formula and axes should not fight the surface"
+        },
+        {
+          "start_ms": 14000,
+          "end_ms": 24000,
+          "visual_action": "gold minimum point pulses; loss basin remains visible",
+          "camera_action": "subtle push-in/orbit implied by surface motion",
+          "text_density": "medium",
+          "comfort_note": "highlight clear but not neon"
+        },
+        {
+          "start_ms": 24000,
+          "end_ms": 30000,
+          "visual_action": "final showcase hold: formula, surface, and minimum point remain clean",
+          "camera_action": "settle into stable end frame",
+          "text_density": "low",
+          "comfort_note": "usable as title-card or teaching pause"
+        }
+      ],
+      "captions": [
+        {
+          "text": "把模型参数看成坐标，损失就形成一张曲面。",
+          "time": [
+            2.0,
+            8.0
+          ]
+        },
+        {
+          "text": "训练的目标，是沿着结构更清晰的方向接近低谷。",
+          "time": [
+            8.0,
+            16.0
+          ]
+        },
+        {
+          "text": "金色点标出当前关注的最优区域。",
+          "time": [
+            16.0,
+            24.0
+          ]
+        },
+        {
+          "text": "最终保留公式和曲面，便于继续讲解。",
+          "time": [
+            24.0,
+            30.0
+          ]
+        }
+      ]
+    }
+  ],
+  "quality": {
+    "manual_review_required": true,
+    "generate_contact_sheet": true,
+    "formula_check_required": true
+  }
+}

@@ -32,7 +32,11 @@ def make_contact_sheet(
         (0, 0, 0),
     )
     draw = ImageDraw.Draw(sheet)
-    font = ImageFont.truetype("C:/Windows/Fonts/msyh.ttc", 18)
+    font_path = Path("C:/Windows/Fonts/msyh.ttc")
+    if font_path.exists():
+        font = ImageFont.truetype(str(font_path), 18)
+    else:
+        font = ImageFont.load_default(size=18)
 
     for slot, frame_index in enumerate(indices):
         image = Image.open(frame_paths[frame_index]).convert("RGB")

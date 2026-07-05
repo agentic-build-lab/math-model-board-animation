@@ -1,0 +1,75 @@
+{
+  "generated_at": "2026-07-05T10:10:00Z",
+  "samples": [
+    {
+      "scene_id": "garch_volatility_memory",
+      "version": "v20260705T103218Z",
+      "quality_label": "candidate",
+      "recommended_as_case": true,
+      "config": "examples/garch_volatility_scene.json",
+      "command": "python scripts/render_model_video.py --config examples/garch_volatility_scene.json",
+      "output_dir": "outputs/renders/garch_volatility_memory/v20260705T103218Z_garch_volatility_scene/",
+      "preview_html": "outputs/renders/garch_volatility_memory/v20260705T103218Z_garch_volatility_scene/preview.html",
+      "review_notes": "outputs/renders/garch_volatility_memory/v20260705T103218Z_garch_volatility_scene/review_notes.md",
+      "recipe": "docs/recipes/garch_candidate_recipe.md"
+    },
+    {
+      "scene_id": "garch_volatility_teaching",
+      "version": "v20260705T112443Z",
+      "quality_label": "candidate",
+      "recommended_as_case": true,
+      "config": "examples/garch_teaching_scene.json",
+      "command": "python scripts/render_model_video.py --config examples/garch_teaching_scene.json",
+      "output_dir": "outputs/renders/garch_volatility_teaching/v20260705T112443Z_garch_teaching_scene/",
+      "preview_html": "outputs/renders/garch_volatility_teaching/v20260705T112443Z_garch_teaching_scene/preview.html",
+      "review_notes": "outputs/renders/garch_volatility_teaching/v20260705T112443Z_garch_teaching_scene/review_notes.md",
+      "recipe": "docs/recipes/garch_teaching_recipe.md"
+    },
+    {
+      "scene_id": "capm_beta_regression",
+      "version": "v20260705T112920Z",
+      "quality_label": "candidate",
+      "recommended_as_case": true,
+      "config": "examples/capm_regression_scene.json",
+      "command": "python scripts/render_model_video.py --config examples/capm_regression_scene.json",
+      "output_dir": "outputs/renders/capm_beta_regression/v20260705T112920Z_capm_regression_scene/",
+      "preview_html": "outputs/renders/capm_beta_regression/v20260705T112920Z_capm_regression_scene/preview.html",
+      "review_notes": "outputs/renders/capm_beta_regression/v20260705T112920Z_capm_regression_scene/review_notes.md"
+    },
+    {
+      "scene_id": "loss_surface_minimum",
+      "version": "v20260705T113104Z",
+      "quality_label": "prototype",
+      "recommended_as_case": false,
+      "config": "examples/loss_surface_scene.json",
+      "command": "python scripts/render_model_video.py --config examples/loss_surface_scene.json",
+      "output_dir": "outputs/renders/loss_surface_minimum/v20260705T113104Z_loss_surface_scene/",
+      "preview_html": "outputs/renders/loss_surface_minimum/v20260705T113104Z_loss_surface_scene/preview.html",
+      "review_notes": "outputs/renders/loss_surface_minimum/v20260705T113104Z_loss_surface_scene/review_notes.md"
+    },
+    {
+      "scene_id": "loss_surface_showcase",
+      "version": "v20260705T150702Z",
+      "quality_label": "candidate",
+      "recommended_as_case": true,
+      "config": "examples/loss_surface_showcase_scene.json",
+      "command": "python scripts/render_model_video.py --config examples/loss_surface_showcase_scene.json",
+      "output_dir": "outputs/renders/loss_surface_showcase/v20260705T150702Z_loss_surface_showcase_scene/",
+      "preview_html": "outputs/renders/loss_surface_showcase/v20260705T150702Z_loss_surface_showcase_scene/preview.html",
+      "review_notes": "outputs/renders/loss_surface_showcase/v20260705T150702Z_loss_surface_showcase_scene/review_notes.md",
+      "recipe": "docs/recipes/loss_surface_showcase_recipe.md"
+    },
+    {
+      "scene_id": "factor_exposure_surface",
+      "version": "v20260705T152545Z",
+      "quality_label": "candidate",
+      "recommended_as_case": true,
+      "config": "examples/factor_exposure_surface_scene.json",
+      "command": "python scripts/render_model_video.py --config examples/factor_exposure_surface_scene.json",
+      "output_dir": "outputs/renders/factor_exposure_surface/v20260705T152545Z_factor_exposure_surface_scene/",
+      "preview_html": "outputs/renders/factor_exposure_surface/v20260705T152545Z_factor_exposure_surface_scene/preview.html",
+      "review_notes": "outputs/renders/factor_exposure_surface/v20260705T152545Z_factor_exposure_surface_scene/review_notes.md",
+      "recipe": "docs/recipes/factor_exposure_surface_recipe.md"
+    }
+  ]
+}
